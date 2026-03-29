@@ -9,8 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import Logo from "@/components/shadcn-studio/logo";
 import Link from "next/link";
+import LogoImage from "@/assets/svg/logo";
 
 type NavigationItem = {
   title: string;
@@ -20,10 +20,14 @@ type NavigationItem = {
 const Navbar = ({ navigationData }: { navigationData: NavigationItem }) => {
   return (
     <header className="bg-background sticky top-0 z-50">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 py-7 sm:px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 py-4 sm:px-6">
         <div className="text-muted-foreground flex flex-1 items-center gap-8 font-medium md:justify-center lg:gap-16">
-          <Link href="#">
-            <Logo className="text-foreground gap-3" />
+          <Link href="/" className="flex items-center gap-1">
+            <LogoImage />
+            <span className="text-2xl font-black tracking-tighter text-slate-900 leading-none">
+              EcoSpark
+              <span className="text-emerald-600 font-medium">Hub</span>
+            </span>
           </Link>
           <Link href="#" className="hover:text-primary max-md:hidden">
             Home
