@@ -6,6 +6,8 @@ export const env = createEnv({
     FRONTEND_URL: z.url(),
     BACKEND_URL: z.url(),
     API_BASE_URL: z.url(),
+    ACCESS_TOKEN_SECRET: z.string(),
+    REFRESH_TOKEN_SECRET: z.string(),
   },
   client: {
     NEXT_PUBLIC_FRONTEND_URL: z.url(),
@@ -18,6 +20,8 @@ export const env = createEnv({
     NEXT_PUBLIC_FRONTEND_URL: process.env.NEXT_PUBLIC_FRONTEND_URL,
     NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
     API_BASE_URL: process.env.API_BASE_URL,
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   },
 });
