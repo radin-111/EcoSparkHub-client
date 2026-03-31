@@ -1,11 +1,12 @@
 "use client";
 
-import { LoginForm } from "@/components/login-form";
+
 
 import Image from "next/image";
 import plantTree from "@/assets/plant-tree.jpg";
 import Link from "next/link";
 import Logo from "@/components/shadcn-studio/logo";
+import LoginForm from "@/components/modules/Auth/login-form";
 
 export default function LoginPage() {
   return (

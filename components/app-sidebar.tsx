@@ -13,9 +13,9 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { UserRoles } from "@/types&enums/enums";
+import { UserRoles } from "@/types&enums&interfaces/enums";
 import { adminRoutes, userRoutes } from "@/routes/routes";
-import { routes } from "@/types&enums/routes.types";
+import { routes } from "@/types&enums&interfaces/routes.types";
 
 let route: routes = [];
 route = adminRoutes;

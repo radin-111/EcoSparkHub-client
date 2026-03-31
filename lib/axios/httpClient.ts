@@ -1,5 +1,6 @@
+
 import { env } from "@/env";
-import { ApiResponse } from "@/types&enums/api.types";
+import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import axios from "axios";
 
 interface RequestOptions {

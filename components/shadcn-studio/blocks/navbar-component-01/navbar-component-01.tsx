@@ -29,19 +29,23 @@ const Navbar = ({ navigationData }: { navigationData: NavigationItem }) => {
               <span className="text-emerald-600 font-medium">Hub</span>
             </span>
           </Link>
-          <Link href="#" className="hover:text-primary max-md:hidden">
+          {/* <Link href="/" className="hover:text-primary max-md:hidden">
             Home
           </Link>
-          <Link href="#" className="hover:text-primary max-md:hidden">
-            Products
+          <Link href="/ideas" className="hover:text-primary max-md:hidden">
+            Ideas
           </Link>
 
-          <Link href="#" className="hover:text-primary max-md:hidden">
-            About Us
-          </Link>
-          <Link href="#" className="hover:text-primary max-md:hidden">
-            Contacts
-          </Link>
+          <Link href="/submit-idea" className="hover:text-primary max-md:hidden">
+            Submit Idea
+          </Link> */}
+         {
+          navigationData.map((item, index) => (
+            <Link key={index} href={item.href} className="hover:text-primary max-md:hidden">
+              {item.title}
+            </Link>
+          ))
+         }
         </div>
 
         <div className="flex items-center gap-6">

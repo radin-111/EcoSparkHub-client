@@ -1,7 +1,7 @@
 "use client";
 
 import Logo from "@/components/shadcn-studio/logo";
-import { SignupForm } from "@/components/signup-form";
+import { SignupForm } from "@/components/modules/Auth/signup-form";
 import bamboo from "@/assets/bamboo.webp";
 import Link from "next/link";
 import Image from "next/image";

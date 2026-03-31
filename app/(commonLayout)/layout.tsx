@@ -1,27 +1,25 @@
 import Navbar from "@/components/shadcn-studio/blocks/navbar-component-01/navbar-component-01";
 import { Footer } from "@/components/shared/Footer";
+
 import React, { ReactNode } from "react";
 
-export default function CommonLayout({ children }: { children: ReactNode }) {
+export default async function CommonLayout ({ children }: { children: ReactNode }) {
   const navigationData = [
     {
       title: "Home",
-      href: "#",
+      href: "/",
     },
     {
-      title: "Products",
-      href: "#",
+      title: "Ideas",
+      href: "/ideas",
     },
     {
-      title: "About Us",
-      href: "#",
+      title: "Submit Idea",
+      href: "/dashboard/my-ideas",
     },
-    {
-      title: "Contacts",
-      href: "#",
-    },
+   
   ];
-
+ 
   return (
     <div>
       <Navbar navigationData={navigationData} />
