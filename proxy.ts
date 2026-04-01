@@ -9,8 +9,9 @@ export async function proxy(request: NextRequest) {
   const session = (await getSession()) as ApiResponse<SessionResponse>;
 
   const authRoutes = ["/signup", "/login"];
-  const isAuthenticated = session.success;
-  const role = session.data.user.role as string;
+  const isAuthenticated = session?.success || false;
+  const role = session?.data?.user?.role as string;
+  const isAuthRoute = authRoutes.some((route) => reqPath.startsWith(route));
   let isAdmin = false;
   let isMember = false;
 
@@ -20,12 +21,9 @@ export async function proxy(request: NextRequest) {
   if (role === UserRoles.MEMBER) {
     isMember = true;
   }
-  if (authRoutes.includes(reqPath) && isAuthenticated) {
+  if (isAuthRoute && isAuthenticated) {
     return NextResponse.redirect(new URL("/", request.url));
   }
-
-
-  
 
   if (
     (reqPath.startsWith("/admin") || reqPath.startsWith("/dashboard")) &&
