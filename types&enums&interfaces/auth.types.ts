@@ -23,3 +23,20 @@ export interface ILoginResponse {
     id: string;
   };
 }
+
+export interface SessionResponse {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    image: string | null;
+    role: string;
+    createdAt: string;
+    needPasswordChange: boolean;
+    profileStatus: string;
+    isDeleted: boolean;
+    deletedAt: string | null;
+    updatedAt: string;
+  };
+}

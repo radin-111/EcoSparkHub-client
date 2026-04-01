@@ -1,19 +1,21 @@
-
 import { env } from "@/env";
 import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import axios from "axios";
+import { cookies } from "next/headers";
 
 interface RequestOptions {
   headers?: Record<string, string>;
   params?: Record<string, unknown>;
 }
 
-const axiosInstance = () => {
+const axiosInstance = async () => {
+  const cookieStore = await cookies();
   const instance = axios.create({
     baseURL: env.NEXT_PUBLIC_API_BASE_URL,
     timeout: 30000,
     headers: {
       "Content-Type": "application/json",
+      Cookie: cookieStore.toString(),
     },
   });
   return instance;
@@ -24,7 +26,7 @@ const get = async <T>(
   options?: RequestOptions,
 ): Promise<ApiResponse<T>> => {
   try {
-    const instance = axiosInstance();
+    const instance = await axiosInstance();
     const response = await instance.get<ApiResponse<T>>(endpoint, {
       headers: options?.headers,
       params: options?.params,
@@ -41,7 +43,8 @@ const put = async <T>(
   options?: RequestOptions,
 ): Promise<ApiResponse<T>> => {
   try {
-    const instance = axiosInstance();
+    const instance = await axiosInstance();
+
     const response = await instance.put<ApiResponse<T>>(endpoint, data, {
       headers: options?.headers,
       params: options?.params,
@@ -58,7 +61,7 @@ const post = async <T>(
   options?: RequestOptions,
 ): Promise<ApiResponse<T>> => {
   try {
-    const instance = axiosInstance();
+    const instance = await axiosInstance();
     const response = await instance.post<ApiResponse<T>>(endpoint, data, {
       headers: options?.headers,
       params: options?.params,
@@ -73,7 +76,7 @@ const del = async <T>(
   options?: RequestOptions,
 ): Promise<ApiResponse<T>> => {
   try {
-    const instance = axiosInstance();
+    const instance = await axiosInstance();
     const response = await instance.delete<ApiResponse<T>>(endpoint, {
       headers: options?.headers,
       params: options?.params,
@@ -89,7 +92,7 @@ const patch = async <T>(
   options?: RequestOptions,
 ): Promise<ApiResponse<T>> => {
   try {
-    const instance = axiosInstance();
+    const instance = await axiosInstance();
     const response = await instance.patch<ApiResponse<T>>(endpoint, data, {
       headers: options?.headers,
       params: options?.params,

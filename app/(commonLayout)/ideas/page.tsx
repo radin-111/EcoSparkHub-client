@@ -1,6 +1,9 @@
-import React from 'react'
+import { getSession } from '@/Actions/auth.action'
 
-export default function IdeasPage() {
+
+export default async function IdeasPage() {
+  const res = await getSession();
+  
   return (
     <div>IdeasPage</div>
   )
