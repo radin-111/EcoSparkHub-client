@@ -30,7 +30,7 @@ if (session.success && session.data?.user?.role === UserRoles.MEMBER) {
 if (session.success && session.data?.user?.role === UserRoles.ADMIN) {
   navigationData.push({
     title: "Dashboard",
-    href: "/admin/dashboard",
+    href: "/admin",
   });
 }
 

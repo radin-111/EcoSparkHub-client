@@ -5,7 +5,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -20,11 +19,11 @@ import { getSession } from "@/Actions/auth.action";
 import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import { SessionResponse } from "@/types&enums&interfaces/auth.types";
 import Logout from "./modules/Auth/Logout";
-
+import Avatar from "./modules/Auth/Avatar";
 
 let route: routes = [];
 
-const session = await getSession() as ApiResponse<SessionResponse>;
+const session = (await getSession()) as ApiResponse<SessionResponse>;
 
 if (session?.data?.user?.role === UserRoles.ADMIN) {
   route = adminRoutes;
@@ -32,10 +31,17 @@ if (session?.data?.user?.role === UserRoles.ADMIN) {
   route = userRoutes;
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const session = (await getSession()) as ApiResponse<SessionResponse>;
+
   return (
     <Sidebar {...props}>
-      <SidebarHeader></SidebarHeader>
+      <SidebarHeader className="flex items-left">
+        <div className="ml-4 mb-0 mt-2">
+          <Avatar imageUrl={session?.data?.user?.image as string} />
+          <h1 className="text-lg font-bold">{session?.data?.user?.name}</h1>
+        </div>
+      </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
@@ -59,9 +65,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </SidebarMenuItem>
                 );
               })}
-<br />
-<br />
-<br />
+              <br />
+              <br />
+              <br />
               <Logout />
             </SidebarMenu>
           </SidebarGroupContent>

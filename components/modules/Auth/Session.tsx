@@ -13,7 +13,7 @@ export default async function Session() {
   } else {
     return (
       <div className="flex items-center">
-        <Avatar />
+        <Avatar imageUrl={session?.data?.user?.image as string} />
         <Logout />
       </div>
     );

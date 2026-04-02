@@ -19,7 +19,7 @@ export const userRoutes = [
   },
   {
     path: "/dashboard",
-    name: "Dashboard",
+    name: "Statistics",
     icon: LayoutDashboard,
   },
   {
@@ -51,8 +51,8 @@ export const adminRoutes = [
     icon: Home,
   },
   {
-    path: "/admin/dashboard",
-    name: "Stats",
+    path: "/admin",
+    name: "Statistics",
     icon: BarChart3,
   },
   {
@@ -76,7 +76,7 @@ export const adminRoutes = [
     icon: Users,
   },
   {
-    path: "/dashboard/profile",
+    path: "/admin/profile",
     name: "Profile",
     icon: User,
   },
