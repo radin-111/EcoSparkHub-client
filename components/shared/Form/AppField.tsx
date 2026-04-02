@@ -23,6 +23,7 @@ type AppFieldOptions = {
   placeholder?: string;
   append?: React.ReactNode;
   prepend?: React.ReactNode;
+  defaultValue?: string;
   className?: string;
   disabled?: boolean;
 };
@@ -31,6 +32,7 @@ export default function AppField({
   field,
   label,
   type,
+  defaultValue,
   placeholder,
   append,
   prepend,
@@ -60,6 +62,7 @@ export default function AppField({
           id={field.name}
           name={field.name}
           type={type}
+          defaultValue={defaultValue}
           placeholder={placeholder}
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}

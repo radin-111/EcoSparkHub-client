@@ -12,7 +12,7 @@ import z from "zod";
 import Link from "next/link";
 import { loginWithEmailAndPassword } from "@/Actions/auth.action";
 import { toast } from "sonner";
-import {  useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +21,7 @@ export default function LoginForm() {
     mutationFn: (payload: z.infer<typeof loginSchema>) =>
       loginWithEmailAndPassword(payload),
   });
-const router = useRouter();
+  const router = useRouter();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -43,7 +43,6 @@ const router = useRouter();
         toast.success("Login successful", { id: toastId });
 
         toast.dismiss(toastId);
-
 
         router.push("/dashboard");
       } catch (error) {
@@ -118,7 +117,7 @@ const router = useRouter();
 
         {serverError && (
           <Alert variant={"destructive"}>
-            <AlertDescription>{serverError}</AlertDescription>
+            <AlertDescription>Login failed</AlertDescription>
           </Alert>
         )}
 
