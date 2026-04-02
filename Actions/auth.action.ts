@@ -1,6 +1,7 @@
 "use server";
 
 import { httpClient } from "@/lib/axios/httpClient";
+import { deleteCookie } from "@/lib/cookieUtils";
 import { setTokenCookies } from "@/lib/tokenUtils";
 import { userServices } from "@/services/user.serivces";
 import { ApiResponse } from "@/types&enums&interfaces/api.types";
@@ -57,6 +58,24 @@ export const getSession = async (): Promise<
     return {
       success: false,
       message: `Failed to fetch session: ${error instanceof Error ? error.message : "Unknown error"}`,
+    };
+  }
+};
+
+export const logout = async () => {
+  try {
+    const response = (await userServices.logout()) as ApiResponse<string>;
+    console.log(response);
+    if (response.success) {
+      await deleteCookie("accessToken");
+      await deleteCookie("refreshToken");
+      await deleteCookie("better-auth.session_token");
+    }
+    return response;
+  } catch (error: unknown) {
+    return {
+      success: false,
+      message: `Logout failed: ${error instanceof Error ? error.message : "Unknown error"}`,
     };
   }
 };

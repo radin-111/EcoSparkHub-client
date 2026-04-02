@@ -12,6 +12,7 @@ import z from "zod";
 import Link from "next/link";
 import { loginWithEmailAndPassword } from "@/Actions/auth.action";
 import { toast } from "sonner";
+import {  useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,6 +21,7 @@ export default function LoginForm() {
     mutationFn: (payload: z.infer<typeof loginSchema>) =>
       loginWithEmailAndPassword(payload),
   });
+const router = useRouter();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -41,6 +43,9 @@ export default function LoginForm() {
         toast.success("Login successful", { id: toastId });
 
         toast.dismiss(toastId);
+
+
+        router.push("/dashboard");
       } catch (error) {
         setServerError("An unexpected error occurred. Please try again.");
         toast.error("Some error occurred", { id: toastId });

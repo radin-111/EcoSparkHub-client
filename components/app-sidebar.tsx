@@ -16,14 +16,21 @@ import Link from "next/link";
 import { UserRoles } from "@/types&enums&interfaces/enums";
 import { adminRoutes, userRoutes } from "@/routes/routes";
 import { routes } from "@/types&enums&interfaces/routes.types";
+import { getSession } from "@/Actions/auth.action";
+import { ApiResponse } from "@/types&enums&interfaces/api.types";
+import { SessionResponse } from "@/types&enums&interfaces/auth.types";
+import Logout from "./modules/Auth/Logout";
+
 
 let route: routes = [];
-route = adminRoutes;
-// if (role === UserRoles.ADMIN) {
-//   route = adminRoutes;
-// } else {
-//   route = userRoutes;
-// }
+
+const session = await getSession() as ApiResponse<SessionResponse>;
+
+if (session?.data?.user?.role === UserRoles.ADMIN) {
+  route = adminRoutes;
+} else {
+  route = userRoutes;
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -52,6 +59,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </SidebarMenuItem>
                 );
               })}
+<br />
+<br />
+<br />
+              <Logout />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -8,9 +8,15 @@ import {
   Clock,
   Wallet,
   Users,
+  Home,
 } from "lucide-react";
 
 export const userRoutes = [
+  {
+    path: "/",
+    name: "Home",
+    icon: Home,
+  },
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -39,6 +45,11 @@ export const userRoutes = [
 ];
 
 export const adminRoutes = [
+   {
+    path: "/",
+    name: "Home",
+    icon: Home,
+  },
   {
     path: "/admin/dashboard",
     name: "Stats",

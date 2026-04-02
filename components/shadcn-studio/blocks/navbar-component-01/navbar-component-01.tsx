@@ -11,6 +11,7 @@ import {
 
 import Link from "next/link";
 import LogoImage from "@/assets/svg/logo";
+import Session from "@/components/modules/Auth/Session";
 
 type NavigationItem = {
   title: string;
@@ -24,7 +25,7 @@ const Navbar = ({ navigationData }: { navigationData: NavigationItem }) => {
         <div className="text-muted-foreground flex flex-1 items-center gap-8 font-medium md:justify-center lg:gap-16">
           <Link href="/" className="flex items-center gap-1">
             <LogoImage />
-            <span className="text-2xl font-black tracking-tighter text-slate-900 leading-none">
+            <span className="max-md:hidden text-2xl font-black tracking-tighter text-slate-900 leading-none">
               EcoSpark
               <span className="text-emerald-600 font-medium">Hub</span>
             </span>
@@ -39,13 +40,19 @@ const Navbar = ({ navigationData }: { navigationData: NavigationItem }) => {
           <Link href="/submit-idea" className="hover:text-primary max-md:hidden">
             Submit Idea
           </Link> */}
-         {
-          navigationData.map((item, index) => (
-            <Link key={index} href={item.href} className="hover:text-primary max-md:hidden">
+          {navigationData.map((item, index) => (
+            <Link
+              key={index}
+              href={item.href}
+              className="hover:text-primary max-md:hidden"
+            >
               {item.title}
             </Link>
-          ))
-         }
+          ))}
+
+          <div className="ml-25 mr-0">
+            <Session />
+          </div>
         </div>
 
         <div className="flex items-center gap-6">
