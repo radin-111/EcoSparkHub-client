@@ -16,6 +16,8 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import Image from "next/image";
 import { Upload, User } from "lucide-react";
+import { updateUserProfile } from "@/Actions/user.action";
+
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -34,10 +36,28 @@ interface UserProfile {
 }
 
 const updateProfile = async (payload: z.infer<typeof profileSchema>) => {
-  await new Promise((res) => setTimeout(res, 1000));
-  return { success: true };
-};
+  const formData = new FormData();
 
+  if (payload.image) formData.append("file", payload.image);
+  formData.append(
+    "data",
+    JSON.stringify({
+      name: payload.name,
+    }),
+  );
+  
+
+  try {
+    const success = await updateUserProfile(formData);
+    if (success) {
+      toast.success("Profile updated");
+    } else {
+      toast.error("Update failed");
+    }
+  } catch {
+    toast.error("Something went wrong");
+  }
+};
 export default function Profile({ user }: { user: UserProfile }) {
   const [preview, setPreview] = useState<string | null>(user.image);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -133,7 +153,13 @@ export default function Profile({ user }: { user: UserProfile }) {
               name="name"
               validators={{ onChange: profileSchema.shape.name }}
             >
-              {(field) => <AppField defaultValue={user.name} field={field} label="Full Name" />}
+              {(field) => (
+                <AppField
+                  defaultValue={user.name}
+                  field={field}
+                  label="Full Name"
+                />
+              )}
             </form.Field>
 
             {/* 🔹 Read-only fields (correct way) */}

@@ -65,7 +65,7 @@ export const getSession = async (): Promise<
 export const logout = async () => {
   try {
     const response = (await userServices.logout()) as ApiResponse<string>;
-    console.log(response);
+    
     if (response.success) {
       await deleteCookie("accessToken");
       await deleteCookie("refreshToken");
