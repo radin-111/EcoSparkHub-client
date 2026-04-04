@@ -56,6 +56,11 @@ export const adminRoutes = [
     icon: BarChart3,
   },
   {
+    path: "/admin/categories",
+    name: "Categories",
+    icon: FileText,
+  },
+  {
     path: "/admin/ideas",
     name: "Ideas",
     icon: Lightbulb,
