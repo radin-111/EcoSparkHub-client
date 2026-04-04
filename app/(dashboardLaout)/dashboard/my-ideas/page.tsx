@@ -6,7 +6,7 @@ import { CategoryData } from "@/types&enums&interfaces/category.interface";
 import { myIdeaData } from "@/types&enums&interfaces/idea.interface";
 import { QueryClient } from "@tanstack/react-query";
 
-
+export const dynamic = "force-dynamic";
 export default async function MyIdeasPage() {
   const queryClient = new QueryClient();
 
