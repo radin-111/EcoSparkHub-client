@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,18 +16,21 @@ import AppField from "@/components/shared/Form/AppField";
 import AppSubmitButton from "@/components/shared/Form/AppSubmitButton";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { CategoryData } from "@/types&enums&interfaces/category.interface";
+import { IdeaStatus } from "@/types&enums&interfaces/idea.interface";
+import { createIdea } from "@/Actions/idea.action";
 
-export default function AddIdeaForm() {
+export default function AddIdeaForm({
+  categories,
+}: {
+  categories: CategoryData[];
+}) {
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async (payload: FormData) => {
-      console.log("Submitted FormData:");
-      for (const [key, value] of payload.entries()) {
-        console.log(key, value);
-      }
-      return payload;
+      return await createIdea(payload);
     },
   });
 
@@ -38,24 +42,22 @@ export default function AddIdeaForm() {
       isPaid: false,
       price: "",
       status: "DRAFT",
+      categoryId: "",
     },
     onSubmit: async ({ value }) => {
-      await handleSubmit(value, "PUBLISHED");
+      await handleSubmit(value, IdeaStatus.PENDING);
     },
   });
 
-  
   const handleSubmit = async (
     value: typeof form.state.values,
-    status: "DRAFT" | "PUBLISHED",
+    status: "DRAFT" | "PENDING",
   ) => {
     const formData = new FormData();
 
-  
     if (value.image) {
       formData.append("file", value.image);
     }
-
 
     const data = {
       name: value.name,
@@ -63,12 +65,27 @@ export default function AddIdeaForm() {
       isPaid: value.isPaid,
       price: value.isPaid ? value.price : null,
       status,
+      categoryId: value.categoryId,
     };
 
     formData.append("data", JSON.stringify(data));
+    const toastId = toast.loading("Submitting idea...");
+    try {
+      const promise = mutateAsync(formData);
 
-    await mutateAsync(formData);
-    setOpen(false);
+      const res = await promise;
+
+      if (res?.success) {
+        toast.success("Idea submitted successfully", { id: toastId });
+        setOpen(false);
+        form.reset();
+        setPreview(null);
+      } else {
+        toast.error("Failed to submit idea", { id: toastId });
+      }
+    } catch (err) {
+      toast.error("Failed to submit idea", { id: toastId });
+    }
   };
 
   return (
@@ -90,7 +107,6 @@ export default function AddIdeaForm() {
           }}
           className="space-y-4"
         >
-          {/* Name */}
           <form.Field name="name">
             {(field) => (
               <AppField field={field} label="Name" placeholder="Idea name" />
@@ -107,12 +123,30 @@ export default function AddIdeaForm() {
             )}
           </form.Field>
 
-    
+          <form.Field name="categoryId">
+            {(field) => (
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <select
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  className="w-full border rounded-md px-3 py-2 bg-background"
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </form.Field>
+
           <form.Field name="image">
             {(field) => (
               <div className="space-y-2">
                 <Label>Image</Label>
-
                 <div className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer hover:bg-muted transition">
                   <input
                     type="file"
@@ -122,13 +156,11 @@ export default function AddIdeaForm() {
                     onChange={(e) => {
                       const file = e.target.files?.[0] || null;
                       field.handleChange(file);
-
                       if (file) {
                         setPreview(URL.createObjectURL(file));
                       }
                     }}
                   />
-
                   <label htmlFor="imageUpload" className="cursor-pointer">
                     {preview ? (
                       <img
@@ -147,7 +179,6 @@ export default function AddIdeaForm() {
             )}
           </form.Field>
 
-     
           <form.Field name="isPaid">
             {(field) => (
               <div className="flex items-center space-x-2">
@@ -177,9 +208,7 @@ export default function AddIdeaForm() {
             }
           </form.Subscribe>
 
-  
           <div className="flex gap-3 pt-2">
-
             <Button
               type="button"
               variant="outline"
@@ -190,7 +219,6 @@ export default function AddIdeaForm() {
               Save as Draft
             </Button>
 
-    
             <form.Subscribe
               selector={(s) => [s.canSubmit, s.isSubmitting] as const}
             >
@@ -200,7 +228,7 @@ export default function AddIdeaForm() {
                   isPending={isSubmitting || isPending}
                   disabled={!canSubmit}
                 >
-                  Publish
+                  Submit
                 </AppSubmitButton>
               )}
             </form.Subscribe>
