@@ -44,19 +44,19 @@ export default function AddIdeaForm() {
     },
   });
 
-  // 🔥 shared submit handler
+  
   const handleSubmit = async (
     value: typeof form.state.values,
     status: "DRAFT" | "PUBLISHED",
   ) => {
     const formData = new FormData();
 
-    // 🔥 append file separately
+  
     if (value.image) {
       formData.append("file", value.image);
     }
 
-    // 🔥 rest of data as JSON
+
     const data = {
       name: value.name,
       description: value.description,
@@ -97,7 +97,6 @@ export default function AddIdeaForm() {
             )}
           </form.Field>
 
-          {/* Description */}
           <form.Field name="description">
             {(field) => (
               <AppField
@@ -108,7 +107,7 @@ export default function AddIdeaForm() {
             )}
           </form.Field>
 
-          {/* 🔥 Image Upload (Styled + Preview) */}
+    
           <form.Field name="image">
             {(field) => (
               <div className="space-y-2">
@@ -148,7 +147,7 @@ export default function AddIdeaForm() {
             )}
           </form.Field>
 
-          {/* isPaid */}
+     
           <form.Field name="isPaid">
             {(field) => (
               <div className="flex items-center space-x-2">
@@ -161,7 +160,6 @@ export default function AddIdeaForm() {
             )}
           </form.Field>
 
-          {/* Price */}
           <form.Subscribe selector={(s) => s.values.isPaid}>
             {(isPaid) =>
               isPaid && (
@@ -179,9 +177,9 @@ export default function AddIdeaForm() {
             }
           </form.Subscribe>
 
-          {/* 🔥 Actions */}
+  
           <div className="flex gap-3 pt-2">
-            {/* Save as Draft */}
+
             <Button
               type="button"
               variant="outline"
@@ -192,7 +190,7 @@ export default function AddIdeaForm() {
               Save as Draft
             </Button>
 
-            {/* Publish */}
+    
             <form.Subscribe
               selector={(s) => [s.canSubmit, s.isSubmitting] as const}
             >
