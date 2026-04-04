@@ -23,7 +23,15 @@ export default async function CategoriesPage() {
     CategoryData[]
   >;
 
-  
+  if (categories.data.length === 0) {
+    return (
+      <div className="flex justify-center items-center">
+        <h1 className="text-2xl font-bold text-gray-800">
+          No categories found.
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

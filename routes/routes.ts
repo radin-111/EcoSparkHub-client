@@ -7,8 +7,8 @@ import {
   BarChart3,
   Clock,
   Wallet,
-  Users,
   Home,
+  UsersRound,
 } from "lucide-react";
 
 export const userRoutes = [
@@ -45,7 +45,7 @@ export const userRoutes = [
 ];
 
 export const adminRoutes = [
-   {
+  {
     path: "/",
     name: "Home",
     icon: Home,
@@ -78,7 +78,7 @@ export const adminRoutes = [
   {
     path: "/admin/users",
     name: "Users",
-    icon: Users,
+    icon: UsersRound,
   },
   {
     path: "/admin/profile",
