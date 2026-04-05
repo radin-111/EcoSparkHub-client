@@ -6,12 +6,13 @@ import {
 } from "@tanstack/react-query";
 import { httpClient } from "@/lib/axios/httpClient";
 import { ApiResponse } from "@/types&enums&interfaces/api.types";
+import { IdeaData } from "@/types&enums&interfaces/idea.interface";
 // adjust path if needed
 
 // example fetch function
 const getDrafts = async () => {
   const res = await httpClient.get<object[] | []>("/idea/my-drafts");
-  console.log(res);
+  
   return res;
 };
 export const dynamic = "force-dynamic";
@@ -23,7 +24,7 @@ export default async function DraftPage() {
     queryFn: getDrafts,
   });
   const drafts = queryClient.getQueryData(["drafts"]) as ApiResponse<
-    object[] | []
+    IdeaData[]
   >;
 
   if (drafts.data.length === 0) {

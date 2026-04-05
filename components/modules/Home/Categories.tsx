@@ -28,7 +28,7 @@ export function Categories() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {categories.map((category, i) => (
             <Card
-              key={category}
+              key={i}
               className="group relative h-40 overflow-hidden border-slate-200/60 bg-white/50 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(16,_185,_129,_0.1)] hover:border-emerald-200 cursor-pointer rounded-[2rem]"
             >
               <CardContent className="h-full p-8 flex flex-col justify-end">

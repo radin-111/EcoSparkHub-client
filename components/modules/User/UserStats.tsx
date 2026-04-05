@@ -26,26 +26,39 @@ import {
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
 
-export default function UserStats({
-  stats,
-}: {
-  stats: StatsResponse;
-}) {
+export default function UserStats({ stats }: { stats: StatsResponse }) {
   if (!stats?.success) return <div>No data</div>;
 
-  const { overview, charts, topIdeas } = stats.data;
+  // ✅ Safe extraction with defaults
+  const overview = stats.data?.overview ?? {
+    totalIdeas: 0,
+    totalComments: 0,
+    totalReplies: 0,
+    totalCategories: 0,
+    totalUpVotes: 0,
+    totalDownVotes: 0,
+  };
 
-  // 🔹 Transform bar chart data (number[] → object[])
-  const barChartData = charts.barChartData.map((value, index) => ({
-    name: `Category ${index + 1}`,
-    value,
-  }));
+  const charts = stats.data?.charts ?? {
+    pieChartData: [],
+    barChartData: [],
+    monthlyChartData: [],
+  };
 
-  // 🔹 Transform monthly data (number[] → object[])
-  const monthlyChartData = charts.monthlyChartData.map((value, index) => ({
-    month: `M${index + 1}`,
-    ideas: value,
-  }));
+  const topIdeas = stats.data?.topIdeas ?? [];
+
+  // ✅ Transform data safely
+  const barChartData =
+    charts.barChartData?.map((value, index) => ({
+      name: `Category ${index + 1}`,
+      value,
+    })) ?? [];
+
+  const monthlyChartData =
+    charts.monthlyChartData?.map((value, index) => ({
+      month: `M${index + 1}`,
+      ideas: value,
+    })) ?? [];
 
   const statCards = [
     { title: "Ideas", value: overview.totalIdeas, icon: Lightbulb },
@@ -87,15 +100,15 @@ export default function UserStats({
             <ResponsiveContainer>
               <PieChart>
                 <Pie
-                  data={charts.pieChartData}
+                  data={charts.pieChartData ?? []}
                   dataKey="value"
                   nameKey="name"
                   outerRadius={100}
                   label
                 >
-                  {charts.pieChartData.map((entry, index) => (
+                  {(charts.pieChartData ?? []).map((entry, index) => (
                     <Cell
-                      key={entry.name}
+                      key={entry?.name ?? index}
                       fill={COLORS[index % COLORS.length]}
                     />
                   ))}
@@ -160,25 +173,25 @@ export default function UserStats({
           {topIdeas.length === 0 ? (
             <p className="text-muted-foreground">No top ideas yet</p>
           ) : (
-            topIdeas.map((idea) => (
+            topIdeas.map((idea, i) => (
               <div
-                key={idea.ideaId}
+                key={i}
                 className="flex justify-between items-center border p-3 rounded-lg"
               >
                 <div>
-                  <p className="font-medium">{idea.ideaTitle}</p>
+                  <p className="font-medium">{idea?.ideaTitle}</p>
                   <p className="text-xs text-muted-foreground">
-                    {idea.ideaStatus}
+                    {idea?.ideaStatus}
                   </p>
                 </div>
                 <div className="flex gap-3 text-sm">
                   <span className="flex items-center gap-1">
                     <ThumbsUp className="w-4 h-4" />
-                    {idea.ideaUpVotes}
+                    {idea?.ideaUpVotes ?? 0}
                   </span>
                   <span className="flex items-center gap-1">
                     <ThumbsDown className="w-4 h-4" />
-                    {idea.ideaDownVotes}
+                    {idea?.ideaDownVotes ?? 0}
                   </span>
                 </div>
               </div>
@@ -189,4 +202,3 @@ export default function UserStats({
     </div>
   );
 }
-

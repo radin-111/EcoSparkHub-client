@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
+import { z } from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,9 +18,14 @@ import AppField from "@/components/shared/Form/AppField";
 import AppSubmitButton from "@/components/shared/Form/AppSubmitButton";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+
 import { CategoryData } from "@/types&enums&interfaces/category.interface";
 import { IdeaStatus } from "@/types&enums&interfaces/idea.interface";
 import { createIdea } from "@/Actions/idea.action";
+import { ideaSchema } from "@/zod/idea.schema";
+
+
+
 
 export default function AddIdeaForm({
   categories,
@@ -45,6 +52,23 @@ export default function AddIdeaForm({
       categoryId: "",
     },
     onSubmit: async ({ value }) => {
+     
+      const parsed = ideaSchema.safeParse(value);
+
+      if (!parsed.success) {
+        const firstError = Object.values(
+          parsed.error.flatten().fieldErrors,
+        )[0]?.[0];
+        toast.error(firstError || "Validation failed");
+        return;
+      }
+
+      // ✅ conditional validation
+      if (value.isPaid && (!value.price || Number(value.price) <= 0)) {
+        toast.error("Price must be greater than 0");
+        return;
+      }
+
       await handleSubmit(value, IdeaStatus.PENDING);
     },
   });
@@ -70,10 +94,9 @@ export default function AddIdeaForm({
 
     formData.append("data", JSON.stringify(data));
     const toastId = toast.loading("Submitting idea...");
-    try {
-      const promise = mutateAsync(formData);
 
-      const res = await promise;
+    try {
+      const res = await mutateAsync(formData);
 
       if (res?.success) {
         toast.success("Idea submitted successfully", { id: toastId });
@@ -107,13 +130,19 @@ export default function AddIdeaForm({
           }}
           className="space-y-4"
         >
-          <form.Field name="name">
+          <form.Field
+            name="name"
+            validators={{ onChange: ideaSchema.shape.name }}
+          >
             {(field) => (
               <AppField field={field} label="Name" placeholder="Idea name" />
             )}
           </form.Field>
 
-          <form.Field name="description">
+          <form.Field
+            name="description"
+            validators={{ onChange: ideaSchema.shape.description }}
+          >
             {(field) => (
               <AppField
                 field={field}
@@ -123,7 +152,10 @@ export default function AddIdeaForm({
             )}
           </form.Field>
 
-          <form.Field name="categoryId">
+          <form.Field
+            name="categoryId"
+            validators={{ onChange: ideaSchema.shape.categoryId }}
+          >
             {(field) => (
               <div className="space-y-2">
                 <Label>Category</Label>
@@ -194,7 +226,12 @@ export default function AddIdeaForm({
           <form.Subscribe selector={(s) => s.values.isPaid}>
             {(isPaid) =>
               isPaid && (
-                <form.Field name="price">
+                <form.Field
+                  name="price"
+                  validators={{
+                    onChange: z.string().min(1, "Price is required"),
+                  }}
+                >
                   {(field) => (
                     <AppField
                       field={field}
