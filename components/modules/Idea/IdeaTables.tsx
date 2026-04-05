@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -12,44 +12,70 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
+import { useMutation } from "@tanstack/react-query";
 
-export interface myIdeaData {
-  id: string;
-  name: string;
-  imageUrl: string;
-  isPaid: false;
-}
+import { toast } from "sonner";
+import { IdeaData } from "@/types&enums&interfaces/idea.interface";
+import EditIdeaDialog from "./EditIdeaDialog";
+import Swal from "sweetalert2";
+import { deleteIdea } from "@/Actions/idea.action";
 
-export default function IdeaTables({
-  ideas,
-  onEdit,
-  onDelete,
-}: {
-  ideas: myIdeaData[];
-  onEdit?: (idea: myIdeaData) => void;
-  onDelete?: (id: string) => void;
-}) {
+export default function IdeaTables({ ideas }: { ideas: IdeaData[] }) {
+  const [open, setOpen] = useState(false);
+  const [selectedIdea, setSelectedIdea] = useState<IdeaData | null>(null);
+
+  const { mutateAsync: deleteIdeaFn } = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await deleteIdea(id);
+      return res;
+    },
+    onSuccess: () => toast.success("Deleted successfully"),
+    onError: () => toast.error("Delete failed"),
+  });
+
+  const handleDelete = async (id: string) => {
+    Swal.fire({
+      title: "Are you sure you want to delete this idea?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Deleting...");
+        try {
+          const res = await deleteIdeaFn(id);
+          if (res.success) {
+            toast.success("Deleted successfully", { id: toastId });
+          }
+        } catch (err) {
+          toast.error("Delete failed", { id: toastId });
+        }
+      }
+    });
+  };
+
+  const handleEdit = (idea: IdeaData) => {
+    setSelectedIdea(idea);
+    setOpen(true);
+  };
+
   return (
-    <div className="rounded-xl border overflow-hidden">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Image</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {ideas.length === 0 ? (
+    <>
+      <div className="rounded-xl border overflow-hidden">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-6">
-                No ideas found
-              </TableCell>
+              <TableHead>Image</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
-          ) : (
-            ideas.map((idea) => (
+          </TableHeader>
+
+          <TableBody>
+            {ideas.map((idea) => (
               <TableRow key={idea.id}>
                 <TableCell>
                   <div className="relative h-12 w-12">
@@ -62,15 +88,19 @@ export default function IdeaTables({
                   </div>
                 </TableCell>
 
-                <TableCell className="font-medium">{idea.name}</TableCell>
+                <TableCell>{idea.name}</TableCell>
 
-                <TableCell>{idea.isPaid ? "Paid" : "Free"}</TableCell>
+                <TableCell>
+                  {idea.isPaid ? `Paid ($${idea.price})` : "Free"}
+                </TableCell>
+
+                <TableCell>{idea.status}</TableCell>
 
                 <TableCell className="text-right space-x-2">
                   <Button
                     size="icon"
                     variant="outline"
-                    onClick={() => onEdit?.(idea)}
+                    onClick={() => handleEdit(idea)}
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
@@ -78,16 +108,19 @@ export default function IdeaTables({
                   <Button
                     size="icon"
                     variant="destructive"
-                    onClick={() => onDelete?.(idea.id)}
+                    onClick={() => handleDelete(idea.id)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </div>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* ✅ reusable dialog */}
+      <EditIdeaDialog open={open} setOpen={setOpen} idea={selectedIdea} />
+    </>
   );
 }

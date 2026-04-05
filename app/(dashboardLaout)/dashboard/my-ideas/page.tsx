@@ -29,11 +29,13 @@ export default async function MyIdeasPage({
   await queryClient.prefetchQuery({
     queryKey: ["myIdeas"],
     queryFn: async () =>
-      await httpClient.get<myIdeaData[]>(`/idea/my-ideas?page=${page}`),
+      await httpClient.get<myIdeaData[]>(`/idea/my-ideas?page=${page || 1}`),
   });
   const myIdeas = queryClient.getQueryData(["myIdeas"]) as ApiResponse<
     myIdeaData[]
   >;
+
+
 
   return (
     <div className="space-y-4">
@@ -46,7 +48,7 @@ export default async function MyIdeasPage({
       ) : (
         <div className="">
           <IdeaTables ideas={myIdeas?.data} />
-          <Pagination totalPages={myIdeas.meta?.totalPages || 0} />
+          <Pagination totalPages={Number(myIdeas?.meta?.totalPages)} />
         </div>
       )}
     </div>

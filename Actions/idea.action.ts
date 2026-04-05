@@ -18,3 +18,15 @@ export const createIdea = async (payload: FormData) => {
     throw err;
   }
 };
+
+
+export const deleteIdea = async (id: string) => {
+  try {
+    const res = await httpClient.delete(`/idea/delete-idea/${id}`);
+    revalidatePath("/dashboard/my-ideas");
+
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
