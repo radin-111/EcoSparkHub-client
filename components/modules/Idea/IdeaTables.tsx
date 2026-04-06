@@ -120,7 +120,7 @@ export default function IdeaTables({ ideas }: { ideas: IdeaData[] }) {
       </div>
 
       {/* ✅ reusable dialog */}
-      <EditIdeaDialog open={open} setOpen={setOpen} idea={selectedIdea} />
+      {/* <EditIdeaDialog open={open} setOpen={setOpen} idea={selectedIdea} /> */}
     </>
   );
 }

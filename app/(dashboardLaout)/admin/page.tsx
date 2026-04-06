@@ -3,7 +3,7 @@ import { httpClient } from "@/lib/axios/httpClient";
 import { AdminStatsData } from "@/types&enums&interfaces/adminStats.interface";
 
 
-
+export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
   const stats = await httpClient.get<AdminStatsData>("/stats/admin-stats");
 
