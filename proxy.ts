@@ -36,7 +36,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
   if (reqPath.startsWith("/dashboard") && !isMember) {
-    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    return NextResponse.redirect(new URL("/admin/", request.url));
   }
 }
 export const config = {
