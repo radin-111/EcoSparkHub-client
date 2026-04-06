@@ -3,7 +3,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AdminStatsResponse } from "@/types&enums&interfaces/adminStats.interface";
 
-
 import {
   Users,
   Lightbulb,
@@ -93,10 +92,7 @@ export default function AdminStats({ stats }: { stats: AdminStatsResponse }) {
                   label
                 >
                   {charts.pieChartData.map((entry, index) => (
-                    <Cell
-                      key={entry.name}
-                      fill={COLORS[index % COLORS.length]}
-                    />
+                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -167,7 +163,7 @@ export default function AdminStats({ stats }: { stats: AdminStatsResponse }) {
                 <div>
                   <p className="font-medium">{idea.ideaTitle}</p>
                   <p className="text-xs text-muted-foreground">
-                    {idea.ideaStatus}
+                    {idea.ideaStatus}   
                   </p>
                 </div>
                 <div className="flex gap-3 text-sm">

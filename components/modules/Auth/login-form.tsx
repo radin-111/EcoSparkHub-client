@@ -44,7 +44,7 @@ export default function LoginForm() {
 
         toast.dismiss(toastId);
 
-        router.push("/dashboard");
+        router.push("/");
       } catch (error) {
         setServerError("An unexpected error occurred. Please try again.");
         toast.error("Some error occurred", { id: toastId });

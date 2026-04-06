@@ -1,4 +1,3 @@
-import React from "react";
 import {
   QueryClient,
   dehydrate,
@@ -7,12 +6,12 @@ import {
 import { httpClient } from "@/lib/axios/httpClient";
 import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import { IdeaData } from "@/types&enums&interfaces/idea.interface";
-// adjust path if needed
+import IdeaTables from "@/components/modules/Idea/IdeaTables";
+import Pagination from "@/components/shared/pagination";
 
-// example fetch function
 const getDrafts = async () => {
   const res = await httpClient.get<object[] | []>("/idea/my-drafts");
-  
+
   return res;
 };
 export const dynamic = "force-dynamic";
@@ -37,7 +36,10 @@ export default async function DraftPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div>DraftPage</div>
+      <div>
+        <IdeaTables ideas={drafts.data} />
+        <Pagination totalPages={Number(drafts.meta?.totalPages)} />
+      </div>
     </HydrationBoundary>
   );
 }
