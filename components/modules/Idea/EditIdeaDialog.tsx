@@ -1,123 +1,222 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import AppField from "@/components/shared/Form/AppField";
+import AppSubmitButton from "@/components/shared/Form/AppSubmitButton";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
-interface Props {
+import { CategoryData } from "@/types&enums&interfaces/category.interface";
+import { ideaSchema } from "@/zod/idea.schema";
+import { myIdeaData } from "@/types&enums&interfaces/idea.interface";
+
+
+
+export default function EditIdeaDialog({
+  categories,
+  initialData,
+  open,
+  onOpenChange,
+}: {
+  categories: CategoryData[];
+  initialData: myIdeaData;
   open: boolean;
-  setOpen: (open: boolean) => void;
-  categories: { id: string; name: string }[];
-}
+  onOpenChange: (open: boolean) => void;
+}) {
+  const [preview, setPreview] = useState<string | null>(
+    initialData.image || null,
+  );
 
-export default function EditIdeaDialog({ open, setOpen, categories }: Props) {
-  const [preview, setPreview] = useState<string | null>(null);
-  const [isPaid, setIsPaid] = useState(false);
+  const form = useForm({
+    defaultValues: {
+      name: initialData.name || "",
+      description: initialData.description || "",
+      image: null as File | null,
+      isPaid: initialData.isPaid || false,
+      price: initialData.price || "",
+      status: initialData.status || "DRAFT",
+      categoryId: initialData.categoryId || "",
+    },
+    onSubmit: async ({ value }) => {
+      const parsed = ideaSchema.safeParse(value);
+
+      if (!parsed.success) {
+        const firstError = Object.values(
+          parsed.error.flatten().fieldErrors,
+        )[0]?.[0];
+        toast.error(firstError || "Validation failed");
+        return;
+      }
+
+      if (value.isPaid && (!value.price || Number(value.price) <= 0)) {
+        toast.error("Price must be greater than 0");
+        return;
+      }
+
+      console.log("Updated Idea Data:", value);
+
+      toast.success("Form submitted (check console)");
+      onOpenChange(false); // 👈 close from parent
+    },
+  });
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Idea</DialogTitle>
+          <DialogTitle>Update Idea</DialogTitle>
         </DialogHeader>
 
-        <form className="space-y-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+          }}
+          className="space-y-4"
+        >
           {/* Name */}
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="Idea name" />
-          </div>
+          <form.Field
+            name="name"
+            validators={{ onChange: ideaSchema.shape.name }}
+          >
+            {(field) => (
+              <AppField field={field} label="Name" placeholder="Idea name" />
+            )}
+          </form.Field>
 
           {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea id="description" placeholder="Idea description" />
-          </div>
+          <form.Field
+            name="description"
+            validators={{ onChange: ideaSchema.shape.description }}
+          >
+            {(field) => (
+              <AppField
+                field={field}
+                label="Description"
+                placeholder="Idea description"
+              />
+            )}
+          </form.Field>
 
           {/* Category */}
-          <div className="space-y-2">
-            <Label htmlFor="categoryId">Category</Label>
-            <select
-              id="categoryId"
-              className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-            >
-              <option value="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <form.Field
+            name="categoryId"
+            validators={{ onChange: ideaSchema.shape.categoryId }}
+          >
+            {(field) => (
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <select
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  className="w-full border rounded-md px-3 py-2 bg-background"
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </form.Field>
 
           {/* Image */}
-          <div className="space-y-2">
-            <Label>Image</Label>
-            <div className="rounded-xl border-2 border-dashed p-4 text-center hover:bg-muted">
-              <input
-                id="imageUpload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    setPreview(URL.createObjectURL(file));
-                  }
-                }}
-              />
-              <label htmlFor="imageUpload" className="cursor-pointer block">
-                {preview ? (
-                  <img
-                    src={preview}
-                    alt="preview"
-                    className="mx-auto h-32 w-full rounded-lg object-cover"
+          <form.Field name="image">
+            {(field) => (
+              <div className="space-y-2">
+                <Label>Image</Label>
+                <div className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer hover:bg-muted transition">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    id="updateImageUpload"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      field.handleChange(file);
+                      if (file) {
+                        setPreview(URL.createObjectURL(file));
+                      }
+                    }}
                   />
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    Click to upload image (optional)
-                  </p>
-                )}
-              </label>
-            </div>
-          </div>
+                  <label htmlFor="updateImageUpload">
+                    {preview ? (
+                      <img
+                        src={preview}
+                        alt="preview"
+                        className="mx-auto h-32 object-cover rounded-lg"
+                      />
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        Click to upload
+                      </p>
+                    )}
+                  </label>
+                </div>
+              </div>
+            )}
+          </form.Field>
 
-          {/* Is Paid */}
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="isPaid"
-              checked={isPaid}
-              onCheckedChange={(val) => setIsPaid(!!val)}
-            />
-            <Label htmlFor="isPaid">Is Paid</Label>
-          </div>
+          {/* Paid */}
+          <form.Field name="isPaid">
+            {(field) => (
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  checked={field.state.value}
+                  onCheckedChange={(val) => field.handleChange(!!val)}
+                />
+                <Label>Is Paid</Label>
+              </div>
+            )}
+          </form.Field>
 
           {/* Price */}
-          {isPaid && (
-            <div className="space-y-2">
-              <Label htmlFor="price">Price</Label>
-              <Input id="price" type="number" placeholder="0.00" />
-            </div>
-          )}
+          <form.Subscribe selector={(s) => s.values.isPaid}>
+            {(isPaid) =>
+              isPaid && (
+                <form.Field
+                  name="price"
+                  validators={{
+                    onChange: z.string().min(1, "Price is required"),
+                  }}
+                >
+                  {(field) => (
+                    <AppField
+                      field={field}
+                      label="Price"
+                      placeholder="Enter price"
+                      type="number"
+                    />
+                  )}
+                </form.Field>
+              )
+            }
+          </form.Subscribe>
 
-          {/* Buttons */}
-          <div className="flex gap-3 pt-2">
-            <Button type="button" variant="outline" className="flex-1">
-              Save as Draft
-            </Button>
-
-            <Button className="flex-1">Submit for Review</Button>
-          </div>
+          {/* Submit */}
+          <form.Subscribe
+            selector={(s) => [s.canSubmit, s.isSubmitting] as const}
+          >
+            {([canSubmit, isSubmitting]) => (
+              <AppSubmitButton isPending={isSubmitting} disabled={!canSubmit}>
+                Update
+              </AppSubmitButton>
+            )}
+          </form.Subscribe>
         </form>
       </DialogContent>
     </Dialog>

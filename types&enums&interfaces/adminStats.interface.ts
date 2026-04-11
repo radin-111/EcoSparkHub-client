@@ -19,11 +19,10 @@ export interface AdminStatsCharts {
 }
 
 export interface AdminStatsTopIdea {
-  ideaId: string;
-  ideaTitle: string;
-  ideaStatus: string;
-  ideaUpVotes: number;
-  ideaDownVotes: number;
+  id: string;
+  name: string;
+  upVotes: number;
+  
 }
 export interface AdminStatsData {
   overview: AdminStatsOverview;

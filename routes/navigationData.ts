@@ -3,35 +3,41 @@ import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import { SessionResponse } from "@/types&enums&interfaces/auth.types";
 import { UserRoles } from "@/types&enums&interfaces/enums";
 
-const session = (await getSession()) as ApiResponse<SessionResponse>;
+export async function getNavigationLinks() {
+  const session = (await getSession()) as ApiResponse<SessionResponse>;
 
-const navigationData = [
-  {
-    title: "Home",
-    href: "/",
-  },
-  {
-    title: "Ideas",
-    href: "/ideas",
-  },
-  {
-    title: "Submit Idea",
-    href: "/dashboard/my-ideas",
-  },
-];
+  let navigationData: { title: string; href: string }[] = [];
+  navigationData = [
+    {
+      title: "Home",
+      href: "/",
+    },
+    {
+      title: "Ideas",
+      href: "/ideas",
+    },
+    {
+      title: "Submit Idea",
+      href: "/dashboard/my-ideas",
+    },
+  ];
+ 
+  if (session.success && session.data?.user?.role === UserRoles.MEMBER) {
+    navigationData.push({
+      title: "Dashboard",
+      href: "/dashboard",
+    });
+    return navigationData;
+  }
 
-if (session.success && session.data?.user?.role === UserRoles.MEMBER) {
-  navigationData.push({
-    title: "Dashboard",
-    href: "/dashboard",
-  });
+  if (session.success && session.data?.user?.role === UserRoles.ADMIN) {
+    navigationData.push({
+      title: "Dashboard",
+      href: "/admin",
+    });
+    return navigationData;
+  }
+
+  return navigationData;
 }
-
-if (session.success && session.data?.user?.role === UserRoles.ADMIN) {
-  navigationData.push({
-    title: "Dashboard",
-    href: "/admin",
-  });
-}
-
-export const navigationLinks = navigationData;
+export const navigationLinks = await getNavigationLinks();

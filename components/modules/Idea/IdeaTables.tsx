@@ -15,10 +15,11 @@ import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
 
 import { toast } from "sonner";
-import { IdeaData } from "@/types&enums&interfaces/idea.interface";
-import EditIdeaDialog from "./EditIdeaDialog";
+import { IdeaData, myIdeaData } from "@/types&enums&interfaces/idea.interface";
+
 import Swal from "sweetalert2";
 import { deleteIdea } from "@/Actions/idea.action";
+import EditIdeaDialog from "./EditIdeaDialog";
 
 export default function IdeaTables({ ideas }: { ideas: IdeaData[] }) {
   const [open, setOpen] = useState(false);
@@ -120,7 +121,13 @@ export default function IdeaTables({ ideas }: { ideas: IdeaData[] }) {
       </div>
 
       {/* ✅ reusable dialog */}
-      {/* <EditIdeaDialog open={open} setOpen={setOpen} idea={selectedIdea} /> */}
+      <EditIdeaDialog
+        categories={[]}
+        initialData={selectedIdea as myIdeaData}
+
+        open={open}
+        onOpenChange={setOpen}
+      />
     </>
   );
 }

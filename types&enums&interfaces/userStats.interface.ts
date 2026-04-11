@@ -15,11 +15,10 @@ export interface StatsCharts {
   monthlyChartData: number[];
 }
 export interface StatsTopIdedea {
-  ideaId: string;
-  ideaTitle: string;
-  ideaStatus: string;
-  ideaUpVotes: number;
-  ideaDownVotes: number;
+  id: string;
+  name: string;
+  upVotes: number;
+  downVotes: number;
 }
 export interface StatsData {
   overview: StatsOverview;

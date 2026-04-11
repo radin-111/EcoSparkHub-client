@@ -16,6 +16,7 @@ const axiosInstance = async () => {
     headers: {
       "Content-Type": "application/json",
       Cookie: cookieStore.toString(),
+      cache: "no-store",
     },
   });
   return instance;

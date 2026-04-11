@@ -1,6 +1,12 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+
 import { StatsResponse } from "@/types&enums&interfaces/userStats.interface";
 
 import {
@@ -12,61 +18,44 @@ import {
   ThumbsDown,
 } from "lucide-react";
 
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis } from "recharts";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
 
 export default function UserStats({ stats }: { stats: StatsResponse }) {
-  if (!stats?.success) return <div>No data</div>;
+  if (!stats?.success || !stats.data) return <div>No data</div>;
 
-  // ✅ Safe extraction with defaults
-  const overview = stats.data?.overview ?? {
-    totalIdeas: 0,
-    totalComments: 0,
-    totalReplies: 0,
-    totalCategories: 0,
-    totalUpVotes: 0,
-    totalDownVotes: 0,
-  };
+  const overview = stats.data.overview ?? {};
+  const charts = stats.data.charts ?? {};
+  const topIdeas = stats.data.topIdeas ?? [];
 
-  const charts = stats.data?.charts ?? {
-    pieChartData: [],
-    barChartData: [],
-    monthlyChartData: [],
-  };
-
-  const topIdeas = stats.data?.topIdeas ?? [];
-
-  // ✅ Transform data safely
   const barChartData =
     charts.barChartData?.map((value, index) => ({
       name: `Category ${index + 1}`,
-      value,
+      value: value ?? 0,
     })) ?? [];
 
   const monthlyChartData =
     charts.monthlyChartData?.map((value, index) => ({
       month: `M${index + 1}`,
-      ideas: value,
+      ideas: value ?? 0,
     })) ?? [];
 
   const statCards = [
-    { title: "Ideas", value: overview.totalIdeas, icon: Lightbulb },
-    { title: "Comments", value: overview.totalComments, icon: MessageSquare },
-    { title: "Replies", value: overview.totalReplies, icon: Reply },
-    { title: "Categories", value: overview.totalCategories, icon: Folder },
-    { title: "Upvotes", value: overview.totalUpVotes, icon: ThumbsUp },
-    { title: "Downvotes", value: overview.totalDownVotes, icon: ThumbsDown },
+    { title: "Ideas", value: overview.totalIdeas ?? 0, icon: Lightbulb },
+    {
+      title: "Comments",
+      value: overview.totalComments ?? 0,
+      icon: MessageSquare,
+    },
+    { title: "Replies", value: overview.totalReplies ?? 0, icon: Reply },
+    { title: "Categories", value: overview.totalCategories ?? 0, icon: Folder },
+    { title: "Upvotes", value: overview.totalUpVotes ?? 0, icon: ThumbsUp },
+    {
+      title: "Downvotes",
+      value: overview.totalDownVotes ?? 0,
+      icon: ThumbsDown,
+    },
   ];
 
   return (
@@ -96,26 +85,22 @@ export default function UserStats({ stats }: { stats: StatsResponse }) {
           <CardHeader>
             <CardTitle>Status</CardTitle>
           </CardHeader>
-          <CardContent className="h-[300px]">
-            <ResponsiveContainer>
+          <CardContent>
+            <ChartContainer config={{}}>
               <PieChart>
                 <Pie
                   data={charts.pieChartData ?? []}
                   dataKey="value"
                   nameKey="name"
                   outerRadius={100}
-                  label
                 >
-                  {(charts.pieChartData ?? []).map((entry, index) => (
-                    <Cell
-                      key={entry?.name ?? index}
-                      fill={COLORS[index % COLORS.length]}
-                    />
+                  {(charts.pieChartData ?? []).map((_, index) => (
+                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <ChartTooltip content={<ChartTooltipContent />} />
               </PieChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
 
@@ -124,20 +109,20 @@ export default function UserStats({ stats }: { stats: StatsResponse }) {
           <CardHeader>
             <CardTitle>Categories</CardTitle>
           </CardHeader>
-          <CardContent className="h-[300px]">
+          <CardContent>
             {barChartData.length === 0 ? (
               <p className="text-center text-muted-foreground">
                 No data available
               </p>
             ) : (
-              <ResponsiveContainer>
+              <ChartContainer config={{}}>
                 <BarChart data={barChartData}>
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip />
+                  <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="value" radius={[6, 6, 0, 0]} />
                 </BarChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             )}
           </CardContent>
         </Card>
@@ -148,18 +133,18 @@ export default function UserStats({ stats }: { stats: StatsResponse }) {
         <CardHeader>
           <CardTitle>Monthly Activity</CardTitle>
         </CardHeader>
-        <CardContent className="h-[300px]">
+        <CardContent>
           {monthlyChartData.length === 0 ? (
             <p className="text-center text-muted-foreground">No activity yet</p>
           ) : (
-            <ResponsiveContainer>
+            <ChartContainer config={{}}>
               <BarChart data={monthlyChartData}>
                 <XAxis dataKey="month" />
                 <YAxis />
-                <Tooltip />
+                <ChartTooltip content={<ChartTooltipContent />} />
                 <Bar dataKey="ideas" radius={[6, 6, 0, 0]} />
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           )}
         </CardContent>
       </Card>
@@ -179,20 +164,17 @@ export default function UserStats({ stats }: { stats: StatsResponse }) {
                 className="flex justify-between items-center border p-3 rounded-lg"
               >
                 <div>
-                  <p className="font-medium">{idea?.ideaTitle}</p>
+                  <p className="font-medium">{idea?.name ?? "Untitled"}</p>
                   <p className="text-xs text-muted-foreground">
-                    {idea?.ideaStatus}
+                    {idea?.name ?? "Unknown"}
                   </p>
                 </div>
                 <div className="flex gap-3 text-sm">
                   <span className="flex items-center gap-1">
                     <ThumbsUp className="w-4 h-4" />
-                    {idea?.ideaUpVotes ?? 0}
+                    {idea?.upVotes ?? 0}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <ThumbsDown className="w-4 h-4" />
-                    {idea?.ideaDownVotes ?? 0}
-                  </span>
+                  
                 </div>
               </div>
             ))

@@ -1,6 +1,12 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+
 import { AdminStatsResponse } from "@/types&enums&interfaces/adminStats.interface";
 
 import {
@@ -13,46 +19,50 @@ import {
   ThumbsDown,
 } from "lucide-react";
 
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis } from "recharts";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
 
 export default function AdminStats({ stats }: { stats: AdminStatsResponse }) {
-  if (!stats?.success) return <div>No data</div>;
+  if (!stats?.success || !stats.data) return <div>No data</div>;
 
-  const { overview, charts, topIdeas } = stats.data;
+  // ✅ safe extraction
+  const overview = stats.data.overview ?? {};
+  const charts = stats.data.charts ?? {};
+  const topIdeas = stats.data.topIdeas ?? [];
 
-  // 🔹 Transform bar chart data
-  const barChartData = charts.barChartData.map((value, index) => ({
-    name: `Category ${index + 1}`,
-    value,
-  }));
+  // ✅ transforms
+  const barChartData =
+    charts.barChartData?.map((value: number, index: number) => ({
+      name: `Category ${index + 1}`,
+      value: value ?? 0,
+    })) ?? [];
 
-  // 🔹 Transform monthly data
-  const monthlyChartData = charts.monthlyChartData.map((value, index) => ({
-    month: `M${index + 1}`,
-    ideas: value,
-  }));
+  const monthlyChartData =
+    charts.monthlyChartData?.map((value: number, index: number) => ({
+      month: `M${index + 1}`,
+      ideas: value ?? 0,
+    })) ?? [];
 
   const statCards = [
-    { title: "Users", value: overview.totalUsers, icon: Users },
-    { title: "Ideas", value: overview.totalIdeas, icon: Lightbulb },
-    { title: "Comments", value: overview.totalComments, icon: MessageSquare },
-    { title: "Replies", value: overview.totalReplies, icon: Reply },
-    { title: "Categories", value: overview.totalCategories, icon: Folder },
-    { title: "Upvotes", value: overview.totalUpVotes, icon: ThumbsUp },
-    { title: "Downvotes", value: overview.totalDownVotes, icon: ThumbsDown },
+    { title: "Users", value: overview.totalUsers ?? 0, icon: Users },
+    { title: "Ideas", value: overview.totalIdeas ?? 0, icon: Lightbulb },
+    {
+      title: "Comments",
+      value: overview.totalComments ?? 0,
+      icon: MessageSquare,
+    },
+    { title: "Replies", value: overview.totalReplies ?? 0, icon: Reply },
+    { title: "Categories", value: overview.totalCategories ?? 0, icon: Folder },
+    { title: "Upvotes", value: overview.totalUpVotes ?? 0, icon: ThumbsUp },
+    {
+      title: "Downvotes",
+      value: overview.totalDownVotes ?? 0,
+      icon: ThumbsDown,
+    },
   ];
+
+ 
 
   return (
     <div className="p-6 space-y-6">
@@ -76,72 +86,71 @@ export default function AdminStats({ stats }: { stats: AdminStatsResponse }) {
 
       {/* 🔹 Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Pie Chart */}
+        {/* Pie */}
         <Card>
           <CardHeader>
             <CardTitle>Status</CardTitle>
           </CardHeader>
-          <CardContent className="h-[300px]">
-            <ResponsiveContainer>
+          <CardContent>
+            <ChartContainer config={{}}>
               <PieChart>
                 <Pie
-                  data={charts.pieChartData}
+                  data={charts.pieChartData ?? []}
                   dataKey="value"
                   nameKey="name"
                   outerRadius={100}
-                  label
                 >
-                  {charts.pieChartData.map((entry, index) => (
+                  {(charts.pieChartData ?? []).map((_, index: number) => (
                     <Cell key={index} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <ChartTooltip content={<ChartTooltipContent />} />
               </PieChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
 
-        {/* Bar Chart */}
+        {/* Bar */}
         <Card>
           <CardHeader>
             <CardTitle>Categories</CardTitle>
           </CardHeader>
-          <CardContent className="h-[300px]">
+          <CardContent>
             {barChartData.length === 0 ? (
               <p className="text-center text-muted-foreground">
                 No data available
               </p>
             ) : (
-              <ResponsiveContainer>
+              <ChartContainer config={{}}>
                 <BarChart data={barChartData}>
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip />
+                  <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="value" radius={[6, 6, 0, 0]} />
                 </BarChart>
-              </ResponsiveContainer>
+              </ChartContainer>
             )}
           </CardContent>
         </Card>
       </div>
 
-      {/* 🔹 Monthly Chart */}
+      {/* 🔹 Monthly */}
       <Card>
         <CardHeader>
           <CardTitle>Monthly Activity</CardTitle>
         </CardHeader>
-        <CardContent className="h-[300px]">
+        <CardContent>
           {monthlyChartData.length === 0 ? (
             <p className="text-center text-muted-foreground">No activity yet</p>
           ) : (
-            <ResponsiveContainer>
+            <ChartContainer config={{}}>
               <BarChart data={monthlyChartData}>
                 <XAxis dataKey="month" />
                 <YAxis />
-                <Tooltip />
+                <ChartTooltip content={<ChartTooltipContent />} />
                 <Bar dataKey="ideas" radius={[6, 6, 0, 0]} />
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           )}
         </CardContent>
       </Card>
@@ -155,26 +164,23 @@ export default function AdminStats({ stats }: { stats: AdminStatsResponse }) {
           {topIdeas.length === 0 ? (
             <p className="text-muted-foreground">No top ideas yet</p>
           ) : (
-            topIdeas.map((idea) => (
+            topIdeas.map((idea, i) => (
               <div
-                key={idea.ideaId}
+                key={i}
                 className="flex justify-between items-center border p-3 rounded-lg"
               >
                 <div>
-                  <p className="font-medium">{idea.ideaTitle}</p>
+                  <p className="font-medium">{idea?.name ?? "Untitled"}</p>
                   <p className="text-xs text-muted-foreground">
-                    {idea.ideaStatus}   
+                    {idea?.name ?? "Unknown"}
                   </p>
                 </div>
                 <div className="flex gap-3 text-sm">
                   <span className="flex items-center gap-1">
                     <ThumbsUp className="w-4 h-4" />
-                    {idea.ideaUpVotes}
+                    {idea?.upVotes ?? 0}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <ThumbsDown className="w-4 h-4" />
-                    {idea.ideaDownVotes}
-                  </span>
+                  
                 </div>
               </div>
             ))
