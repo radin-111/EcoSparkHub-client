@@ -27,12 +27,12 @@ export default function ApproveAndRejectTable({ data }: { data: IdeaData[] }) {
     setOpen(true);
   };
 
-  const handleApprove = (idea: IdeaData) => {
-    console.log("Approved:", idea);
+  const handleApprove = (ideaId: string) => {
+    console.log("Approved:", ideaId);
   };
 
-  const handleReject = (idea: IdeaData) => {
-    console.log("Rejected:", idea);
+  const handleReject = (ideaId: string) => {
+    console.log("Rejected:", ideaId);
   };
 
   return (
@@ -99,7 +99,7 @@ export default function ApproveAndRejectTable({ data }: { data: IdeaData[] }) {
                     <Button
                       size="sm"
                       variant="secondary"
-                      onClick={() => handleApprove(idea)}
+                      onClick={() => handleApprove(idea.id)}
                     >
                       Approve
                     </Button>
@@ -108,7 +108,7 @@ export default function ApproveAndRejectTable({ data }: { data: IdeaData[] }) {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => handleReject(idea)}
+                      onClick={() => handleReject(idea.id)}
                     >
                       Reject
                     </Button>

@@ -21,15 +21,13 @@ import { SessionResponse } from "@/types&enums&interfaces/auth.types";
 import Logout from "./modules/Auth/Logout";
 import Avatar from "./modules/Auth/Avatar";
 
-let route: routes = [];
+let route: routes = userRoutes;
 
 const session = (await getSession()) as ApiResponse<SessionResponse>;
 
 if (session?.data?.user?.role === UserRoles.ADMIN) {
   route = adminRoutes;
-} else {
-  route = userRoutes;
-}
+} 
 
 export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const session = (await getSession()) as ApiResponse<SessionResponse>;
@@ -67,7 +65,8 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
               })}
               <br />
               <br />
-              <br />
+              <br /><br />
+              <div className="my-8"></div>
               <Logout />
             </SidebarMenu>
           </SidebarGroupContent>
