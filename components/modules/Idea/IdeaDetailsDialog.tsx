@@ -14,6 +14,7 @@ import Image from "next/image";
 type Props = {
   idea: IdeaData | null;
   open: boolean;
+
   onOpenChange: (open: boolean) => void;
 };
 
@@ -88,24 +89,10 @@ export default function IdeaDetailsDialog({ idea, open, onOpenChange }: Props) {
             </div>
           </div>
 
-          {/* Content */}
-          <div>
-            <h3 className="font-semibold mb-1">Content</h3>
-            <p className="text-sm text-muted-foreground whitespace-pre-line">
-              {idea.content ?? "No content"}
-            </p>
-          </div>
-
           {/* Actions */}
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Close
-            </Button>
-
-            <Button onClick={handleApprove}>Approve</Button>
-
-            <Button variant="destructive" onClick={handleReject}>
-              Reject
             </Button>
           </div>
         </div>

@@ -1,6 +1,10 @@
 export enum IdeaStatus {
   DRAFT = "DRAFT",
   PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+ 
+
 }
 export interface IdeaData {
   id: string;

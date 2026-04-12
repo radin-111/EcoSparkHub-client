@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { IdeaData } from "@/types&enums&interfaces/idea.interface";
+import { IdeaData, IdeaStatus } from "@/types&enums&interfaces/idea.interface";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,9 @@ import IdeaDetailsDialog from "./IdeaDetailsDialog";
 import Image from "next/image";
 
 import { Eye } from "lucide-react"; // ✅ icon
+import { approveAndRejectIdea } from "@/Actions/idea.action";
+import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 export default function ApproveAndRejectTable({ data }: { data: IdeaData[] }) {
   const [selectedIdea, setSelectedIdea] = useState<IdeaData | null>(null);
@@ -28,11 +31,47 @@ export default function ApproveAndRejectTable({ data }: { data: IdeaData[] }) {
   };
 
   const handleApprove = (ideaId: string) => {
-    console.log("Approved:", ideaId);
+    Swal.fire({
+      title: "Are you sure you want to approve this idea?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Approve",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Approving idea...");
+        try {
+          const res = await approveAndRejectIdea(ideaId, IdeaStatus.APPROVED);
+          if (res.success) {
+            toast.success("Idea approved successfully", { id: toastId });
+          }
+        } catch (err) {
+          toast.error("Error approving idea", { id: toastId });
+        }
+      }
+    });
   };
 
   const handleReject = (ideaId: string) => {
-    console.log("Rejected:", ideaId);
+    Swal.fire({
+      title: "Are you sure you want to approve this idea?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Approve",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Approving idea...");
+        try {
+          const res = await approveAndRejectIdea(ideaId, IdeaStatus.APPROVED);
+          if (res.success) {
+            toast.success("Idea approved successfully", { id: toastId });
+          }
+        } catch (err) {
+          toast.error("Error approving idea", { id: toastId });
+        }
+      }
+    });
   };
 
   return (
