@@ -21,15 +21,7 @@ type Props = {
 export default function IdeaDetailsDialog({ idea, open, onOpenChange }: Props) {
   if (!idea) return null;
 
-  const handleApprove = () => {
-    console.log("Approved:", idea);
-    onOpenChange(false);
-  };
-
-  const handleReject = () => {
-    console.log("Rejected:", idea);
-    onOpenChange(false);
-  };
+ 
 
   const imageSrc = idea.imageUrl || idea.image || "/placeholder.png";
 

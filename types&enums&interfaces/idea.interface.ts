@@ -3,8 +3,6 @@ export enum IdeaStatus {
   PENDING = "PENDING",
   APPROVED = "APPROVED",
   REJECTED = "REJECTED",
- 
-
 }
 export interface IdeaData {
   id: string;
@@ -42,4 +40,14 @@ export interface myIdeaData {
 
   content: string;
   image: string;
+}
+
+export interface GeneralIdea {
+  id: string;
+  name: string;
+  imageUrl: string;
+  isPaid: boolean;
+  up_vote: number;
+  down_vote: number;
+  createdAt: string;
 }
