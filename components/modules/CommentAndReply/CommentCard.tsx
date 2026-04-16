@@ -20,6 +20,8 @@ import { deleteComment, updateComment } from "@/Actions/comment.action";
 import { toast } from "sonner";
 import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import Swal from "sweetalert2";
+import { createReply } from "@/Actions/reply.action";
+import { ReplyData } from "@/types&enums&interfaces/reply.interface";
 
 export default function CommentCard({
   comment,
@@ -83,14 +85,25 @@ export default function CommentCard({
     });
   };
 
-  // -------------------------
-  // REPLY ACTION
-  // -------------------------
-  const handleReply = () => {
+  
+  const handleCreateReply = async () => {
     const toastId = toast.loading("Creating reply...");
-
-    setReplyContent("");
-    setReplyOpen(false);
+    try {
+      const res = await createReply({
+        commentId: comment.id,
+        content: replyContent,
+      }) as unknown as ApiResponse<ReplyData>;
+      if (res?.success) {
+        toast.success("Reply created successfully", { id: toastId });
+      } else {
+        toast.error("Failed to create reply", { id: toastId });
+      }
+    } catch (err) {
+      toast.error("Failed to create reply", { id: toastId });
+    } finally {
+      setReplyContent("");
+      setReplyOpen(false);
+    }
   };
 
   return (
@@ -132,7 +145,7 @@ export default function CommentCard({
                   placeholder="Write your reply..."
                 />
 
-                <Button onClick={handleReply}>Submit</Button>
+                <Button onClick={handleCreateReply}>Submit</Button>
               </DialogContent>
             </Dialog>
           )}

@@ -12,6 +12,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Pen, Trash2 } from "lucide-react";
+import { deleteReply, updateReply } from "@/Actions/reply.action";
+import { toast } from "sonner";
+import { ApiResponse } from "@/types&enums&interfaces/api.types";
+import Swal from "sweetalert2";
 
 export default function ReplyItem({
   reply,
@@ -25,17 +29,45 @@ export default function ReplyItem({
 
   const isOwner = sessionUserId === reply.userId;
 
-  const handleEdit = () => {
-    console.log("Update Reply:", {
-      replyId: reply.id,
-      content,
-    });
+  const handleEdit = async () => {
+    const toastId = toast.loading("Updating reply...");
+    try {
+      const res = (await updateReply(reply.id, {
+        content,
+      })) as ApiResponse<ReplyData>;
+      if (res?.success) {
+        toast.success("Reply updated successfully", { id: toastId });
+      } else {
+        toast.error("Failed to update reply", { id: toastId });
+      }
+    } catch (err) {
+      toast.error("Failed to update reply", { id: toastId });
+    }
     setOpen(false);
   };
 
-  const handleDelete = () => {
-    console.log("Delete Reply:", {
-      replyId: reply.id,
+  const handleDelete = async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Deleting reply...");
+        try {
+          const res = (await deleteReply(reply.id)) as ApiResponse<ReplyData>;
+          if (res?.success) {
+            toast.success("Reply deleted successfully", { id: toastId });
+          } else {
+            toast.error("Failed to delete reply", { id: toastId });
+          }
+        } catch (err) {
+          toast.error("Failed to delete reply", { id: toastId });
+        }
+      }
     });
   };
 

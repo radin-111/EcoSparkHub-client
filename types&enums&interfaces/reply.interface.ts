@@ -1,4 +1,10 @@
-
+export interface CreateReplyPayload {
+  commentId: string;
+  content: string;
+}
+export interface UpdateReplyPayload {
+  content: string;
+}
 export interface ReplyData {
   id: string;
   userId: string;
