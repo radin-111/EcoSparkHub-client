@@ -14,6 +14,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 import CommentCard from "./CommentCard";
+import { toast } from "sonner";
+import { createComment } from "@/Actions/comment.action";
+import { ApiResponse } from "@/types&enums&interfaces/api.types";
 
 export function Comments({
   comments,
@@ -27,8 +30,22 @@ export function Comments({
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState("");
 
-  const handleSubmit = () => {
-    console.log("Create Comment:", { content, ideaId });
+  const handleSubmit =async () => {
+    const toastId = toast.loading("Creating comment...") ;
+    try {
+     
+      const res = await createComment({
+        ideaId,
+        content,
+      }) as unknown as ApiResponse<CommentData>;
+      if (res?.success) {
+        toast.success("Comment created successfully", { id: toastId });
+      } else {
+        toast.error("Failed to create comment", { id: toastId });
+      }
+    } catch (err) {
+      toast.error("Failed to create comment", { id: toastId });
+    }
     setContent("");
     setOpen(false);
   };

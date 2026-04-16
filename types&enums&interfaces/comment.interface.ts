@@ -9,3 +9,7 @@ export interface CommentData {
   updatedAt: string;
   replies: ReplyData[] | [];
 }
+export interface CreateCommentPayload {
+  content: string;
+  ideaId: string;
+}

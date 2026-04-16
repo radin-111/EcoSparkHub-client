@@ -16,6 +16,10 @@ import {
 
 import { Textarea } from "@/components/ui/textarea";
 import { Pen, Trash2, Reply } from "lucide-react";
+import { deleteComment, updateComment } from "@/Actions/comment.action";
+import { toast } from "sonner";
+import { ApiResponse } from "@/types&enums&interfaces/api.types";
+import Swal from "sweetalert2";
 
 export default function CommentCard({
   comment,
@@ -35,20 +39,47 @@ export default function CommentCard({
   const isOwner = sessionUserId === comment.userId;
   const isAuthenticated = !!sessionUserId;
 
-  // -------------------------
-  // COMMENT ACTIONS
-  // -------------------------
-  const handleUpdate = () => {
-    console.log("Update Comment:", {
-      commentId: comment.id,
-      content,
-    });
+  const handleUpdate = async () => {
+    const toastId = toast.loading("Updating comment...");
+    try {
+      const res = (await updateComment(comment.id, {
+        content,
+      })) as unknown as ApiResponse<CommentData>;
+      if (res?.success) {
+        toast.success("Comment updated successfully", { id: toastId });
+      } else {
+        toast.error("Failed to update comment", { id: toastId });
+      }
+    } catch (err) {
+      toast.error("Failed to update comment", { id: toastId });
+    }
     setEditOpen(false);
   };
 
-  const handleDelete = () => {
-    console.log("Delete Comment:", {
-      commentId: comment.id,
+  const handleDelete = async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const toastId = toast.loading("Deleting comment...");
+        try {
+          const res = (await deleteComment(
+            comment.id,
+          )) as unknown as ApiResponse<CommentData>;
+          if (res?.success) {
+            toast.success("Comment deleted successfully", { id: toastId });
+          } else {
+            toast.error("Failed to delete comment", { id: toastId });
+          }
+        } catch (err) {
+          toast.error("Failed to delete comment", { id: toastId });
+        }
+      }
     });
   };
 
@@ -56,10 +87,7 @@ export default function CommentCard({
   // REPLY ACTION
   // -------------------------
   const handleReply = () => {
-    console.log("Create Reply:", {
-      content: replyContent,
-      commentId: comment.id,
-    });
+    const toastId = toast.loading("Creating reply...");
 
     setReplyContent("");
     setReplyOpen(false);
