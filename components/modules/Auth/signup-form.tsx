@@ -16,7 +16,7 @@ import AppField from "@/components/shared/Form/AppField";
 import { registerSchema } from "@/zod/auth.schema";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
-import {  setVerifyEmailCookie, signup } from "@/Actions/auth.action";
+import { setVerifyEmailCookie, signup } from "@/Actions/auth.action";
 import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import { ILoginResponse } from "@/types&enums&interfaces/auth.types";
 
@@ -26,7 +26,6 @@ export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -54,6 +53,7 @@ export function SignupForm({
         )) as ApiResponse<ILoginResponse>;
 
         if (!result.data.user.emailVerified) {
+          toast.dismiss();
           const res = await setVerifyEmailCookie(value.email);
           if (res.success) {
             router.push("/verify-email");
