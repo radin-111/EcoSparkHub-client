@@ -10,9 +10,14 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import z from "zod";
 import Link from "next/link";
-import { loginWithEmailAndPassword } from "@/Actions/auth.action";
+import {
+  loginWithEmailAndPassword,
+  setVerifyEmailCookie,
+} from "@/Actions/auth.action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { ApiResponse } from "@/types&enums&interfaces/api.types";
+import { ILoginResponse } from "@/types&enums&interfaces/auth.types";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -33,11 +38,22 @@ export default function LoginForm() {
       const toastId = toast.loading("Logging in...");
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result = (await mutateAsync(value)) as any;
-
-        if (!result.accessToken) {
+        const result = (await mutateAsync(
+          value,
+        )) as ApiResponse<ILoginResponse>;
+        
+        if (result.message === "Email not verified") {
+          toast.dismiss(toastId);
+          
+          const res = await setVerifyEmailCookie(value.email);
+          if (res.success) {
+            router.push("/verify-email");
+            return;
+          }
+        }
+        if (!result.data.accessToken) {
           toast.error("Invalid Credentials", { id: toastId });
-          setServerError(result.message || "Login failed");
+          setServerError("Invalid email or password");
           return;
         }
         toast.success("Login successful", { id: toastId });
@@ -47,7 +63,7 @@ export default function LoginForm() {
         router.push("/");
       } catch (error) {
         setServerError("An unexpected error occurred. Please try again.");
-        toast.error("Some error occurred", { id: toastId });
+        toast.error("Invalid Credentials", { id: toastId });
       }
     },
   });
@@ -108,10 +124,10 @@ export default function LoginForm() {
         </form.Field>
         <div className="text-right mt-2">
           <Link
-            href="/forgot-password"
+            href="/signup"
             className="text-sm text-primary hover:underline underline-offset-4"
           >
-            Forgot password?
+            Signup instead?
           </Link>
         </div>
 

@@ -5,7 +5,7 @@ import { httpClient } from "@/lib/axios/httpClient";
 import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import { SessionResponse } from "@/types&enums&interfaces/auth.types";
 import { CommentData } from "@/types&enums&interfaces/comment.interface";
-import { IdeaData } from "@/types&enums&interfaces/idea.interface";
+import { IdeaData, Voted } from "@/types&enums&interfaces/idea.interface";
 import { HydrationBoundary, QueryClient } from "@tanstack/react-query";
 export const dynamic = "force-dynamic";
 export default async function SingleIdeaPage({
@@ -13,11 +13,17 @@ export default async function SingleIdeaPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const queryClient = new QueryClient();
   const { id } = await params;
 
   const session = ((await getSession()) as ApiResponse<SessionResponse>) || {};
+  if (session?.data?.user?.id) {
+    await queryClient.prefetchQuery({
+      queryKey: ["isVoted", id],
+      queryFn: async () => await httpClient.get<Voted>(`/idea/voted/${id}`),
+    });
+  }
 
-  const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["idea", id],
     queryFn: async () => await httpClient.get<IdeaData>(`/idea/${id}`),
@@ -31,17 +37,21 @@ export default async function SingleIdeaPage({
   const comments = queryClient.getQueryData(["comments", id]) as ApiResponse<
     CommentData[]
   >;
-
+  const voted = queryClient.getQueryData(["isVoted", id]) as ApiResponse<Voted> || null;
+  const isVoted = voted?.data || false;
   return (
-  
-      <div className="max-w-8/12 mx-auto">
-        <IdeaDetails idea={idea.data} />
-        <Comments
-          comments={comments.data}
-          ideaId={id}
-          sessionUserId={session?.data?.user?.id || null}
-        />
-      </div>
-    
+    <div className="max-w-8/12 mx-auto">
+      <IdeaDetails
+        idea={idea.data}
+        sessionUserId={session?.data?.user?.id || null}
+        isVoted={isVoted.id ? true : false}
+        isUpvoted={voted?.data?.isUpVote || false}
+      />
+      <Comments
+        comments={comments.data}
+        ideaId={id}
+        sessionUserId={session?.data?.user?.id || null}
+      />
+    </div>
   );
 }

@@ -8,7 +8,7 @@ export async function proxy(request: NextRequest) {
   const reqPath = request.nextUrl.pathname;
   const session = (await getSession()) as ApiResponse<SessionResponse>;
 
-  const authRoutes = ["/signup", "/login"];
+  const authRoutes = ["/signup", "/login", "/verify-email"];
   const isAuthenticated = session?.success || false;
   const role = session?.data?.user?.role as string;
   const isAuthRoute = authRoutes.some((route) => reqPath.startsWith(route));

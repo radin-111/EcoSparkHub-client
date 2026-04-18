@@ -46,3 +46,24 @@ export const approveAndRejectIdea = async (
     throw err;
   }
 };
+
+
+export const upvoteIdea = async (id: string) => {
+  try {
+    const res = await httpClient.post<IdeaData>(`/idea/up-vote/${id}`);
+    revalidatePath("/ideas");
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const downvoteIdea = async (id: string) => {
+  try {
+    const res = await httpClient.post<IdeaData>(`/idea/down-vote/${id}`);
+    revalidatePath("/ideas");
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};

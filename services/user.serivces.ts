@@ -1,6 +1,9 @@
 import { httpClient } from "@/lib/axios/httpClient";
 
-import { SessionResponse } from "@/types&enums&interfaces/auth.types";
+import {
+  SessionResponse,
+  signupUserRequest,
+} from "@/types&enums&interfaces/auth.types";
 
 export const userServices = {
   getSession: async () => {
@@ -20,6 +23,17 @@ export const userServices = {
       return {
         success: false,
         message: `Logout failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      };
+    }
+  },
+  signup: async (payload: signupUserRequest) => {
+    try {
+      const response = await httpClient.post<any>("/auth/signup", payload);
+      return response;
+    } catch (error) {
+      return {
+        success: false,
+        message: `Signup failed: ${error instanceof Error ? error.message : "Unknown error"}`,
       };
     }
   },
