@@ -76,9 +76,9 @@ export default function VerifyEmail() {
           id: toastId
         });
       }
-    } catch (error) {
+    } catch (error:any) {
       
-      toast.error("Verification failed!",{
+      toast.error("Invalid OTP. Please try again.",{
         id: toastId
       });
     }

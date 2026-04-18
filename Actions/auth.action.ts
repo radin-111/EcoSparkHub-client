@@ -157,10 +157,7 @@ export const verifyEmail = async (otp:string) => {
     
     const cookie = await getCookie("verifyEmail");
     if (!cookie) {
-      return {
-        success: false,
-        message: "No verification cookie found",
-      };
+      throw new Error("No verification cookie found");
     }
     
   const decoded = jwt.decode(cookie) as any;
@@ -178,9 +175,6 @@ export const verifyEmail = async (otp:string) => {
   
   return result;
   } catch (error: unknown) {
-    return {
-      success: false,
-      message: `Cookie verification failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-    };
+    throw error;
   }
 };
