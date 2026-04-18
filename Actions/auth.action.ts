@@ -164,10 +164,10 @@ export const verifyEmail = async (otp:string) => {
     }
     
   const decoded = jwt.decode(cookie) as any;
-  const result = await httpClient.post("/auth/verify-email", {
+  const result = await httpClient.post<VerifyEmailResponse>("/auth/verify-email", {
     email: decoded.email,
     otp,
-  }) as ApiResponse<VerifyEmailResponse>;
+  });
   if(result.success){
     const {accessToken, refreshToken, token} = result.data;
     await setTokenCookies("accessToken", accessToken);
