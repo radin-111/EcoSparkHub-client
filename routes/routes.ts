@@ -76,6 +76,11 @@ export const adminRoutes = [
     icon: Wallet,
   },
   {
+    path: "/admin/create-admin",
+    name: "Create Admin",
+    icon: User,
+  },
+  {
     path: "/admin/users",
     name: "Users",
     icon: UsersRound,
