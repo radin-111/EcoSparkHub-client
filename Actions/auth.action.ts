@@ -170,6 +170,7 @@ export const verifyEmail = async (otp:string) => {
     await setTokenCookies("accessToken", accessToken);
     await setTokenCookies("refreshToken", refreshToken);
     await setTokenCookies("better-auth.session_token", token);
+    await deleteCookie("verifyEmail");
   }
 
   
