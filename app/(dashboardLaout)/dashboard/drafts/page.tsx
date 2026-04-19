@@ -8,6 +8,7 @@ import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import { IdeaData } from "@/types&enums&interfaces/idea.interface";
 import IdeaTables from "@/components/modules/Idea/IdeaTables";
 import Pagination from "@/components/shared/pagination";
+import { CategoryData } from "@/types&enums&interfaces/category.interface";
 
 const getDrafts = async () => {
   const res = await httpClient.get<object[] | []>("/idea/my-drafts");
@@ -33,11 +34,20 @@ export default async function DraftPage() {
       </div>
     );
   }
+  await queryClient.prefetchQuery({
+    queryKey: ["categories"],
+    queryFn: async () =>
+      await httpClient.get<CategoryData[]>("/category/all-categories"),
+  });
+
+  const categories = queryClient.getQueryData(["categories"]) as ApiResponse<
+    CategoryData[]
+  >;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div>
-        <IdeaTables ideas={drafts.data} />
+        <IdeaTables categories={categories.data} ideas={drafts.data} />
         <Pagination totalPages={Number(drafts.meta?.totalPages)} />
       </div>
     </HydrationBoundary>

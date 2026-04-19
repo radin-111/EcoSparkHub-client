@@ -67,3 +67,21 @@ export const downvoteIdea = async (id: string) => {
     throw err;
   }
 };
+
+
+export const updateIdea = async (id: string, payload: FormData) => {
+  try {
+    const res = await httpClient.patch<IdeaData>(`/idea/update-idea/${id}`, payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    revalidatePath("/dashboard/my-ideas");
+    revalidatePath("/dashboard/drafts");
+
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};

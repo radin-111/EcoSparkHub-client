@@ -20,8 +20,15 @@ import { IdeaData, myIdeaData } from "@/types&enums&interfaces/idea.interface";
 import Swal from "sweetalert2";
 import { deleteIdea } from "@/Actions/idea.action";
 import EditIdeaDialog from "./EditIdeaDialog";
+import { CategoryData } from "@/types&enums&interfaces/category.interface";
 
-export default function IdeaTables({ ideas }: { ideas: IdeaData[] }) {
+export default function IdeaTables({
+  ideas,
+  categories,
+}: {
+  ideas: IdeaData[];
+  categories: CategoryData[];
+}) {
   const [open, setOpen] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState<IdeaData | null>(null);
 
@@ -122,9 +129,8 @@ export default function IdeaTables({ ideas }: { ideas: IdeaData[] }) {
 
       {/* ✅ reusable dialog */}
       <EditIdeaDialog
-        categories={[]}
+        categories={categories}
         initialData={selectedIdea as myIdeaData}
-
         open={open}
         onOpenChange={setOpen}
       />

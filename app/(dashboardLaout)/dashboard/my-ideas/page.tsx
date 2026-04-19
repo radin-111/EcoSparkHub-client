@@ -47,7 +47,7 @@ export default async function MyIdeasPage({
         </div>
       ) : (
         <div className="">
-          <IdeaTables ideas={myIdeas?.data} />
+          <IdeaTables categories={categories?.data || []} ideas={myIdeas?.data} />
           <Pagination totalPages={Number(myIdeas?.meta?.totalPages)} />
         </div>
       )}

@@ -14,7 +14,7 @@ export default async function CreateAdminPage() {
       await httpClient.get<UserData[]>("/user/all-admins"),
   });
   const admins = queryClient.getQueryData(["admins"]) as ApiResponse<UserData[]>;
-  console.log(admins)
+  
   return (
     <div className="space-y-4">
       <CreateAdminDialog /><br />

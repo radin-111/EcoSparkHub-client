@@ -23,9 +23,7 @@ import { CategoryData } from "@/types&enums&interfaces/category.interface";
 import { IdeaStatus } from "@/types&enums&interfaces/idea.interface";
 import { createIdea } from "@/Actions/idea.action";
 import { ideaSchema } from "@/zod/idea.schema";
-
-
-
+import { Textarea } from "@/components/ui/textarea";
 
 export default function AddIdeaForm({
   categories,
@@ -52,7 +50,6 @@ export default function AddIdeaForm({
       categoryId: "",
     },
     onSubmit: async ({ value }) => {
-     
       const parsed = ideaSchema.safeParse(value);
 
       if (!parsed.success) {
@@ -144,11 +141,20 @@ export default function AddIdeaForm({
             validators={{ onChange: ideaSchema.shape.description }}
           >
             {(field) => (
-              <AppField
-                field={field}
-                label="Description"
-                placeholder="Idea description"
-              />
+              <div className="space-y-2">
+                <Label>Description</Label>
+                <Textarea
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="Idea description"
+                  rows={4}
+                />
+                {field.state.meta.errors?.[0] && (
+                  <p className="text-sm text-red-500">
+                    {field?.state.meta.errors[0]?.message}
+                  </p>
+                )}
+              </div>
             )}
           </form.Field>
 
