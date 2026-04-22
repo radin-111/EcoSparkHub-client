@@ -51,16 +51,18 @@ export interface GeneralIdea {
   down_vote: number;
   createdAt: string;
 }
-// {
-//   "id": "19a5289a-ff5c-4700-acaf-ee63a668ebec",
-//   "userId": "icEFUVhCaSpbRq3CSDDISpCLkrvCxMy6",
-//   "ideaId": "b9a1ab6d-f6f7-4589-a4ff-8239e05e7633",
-//   "isUpVote": true
-// }
 
-export interface Voted{
-  id:string;
-  userId:string;
-  isUpVote:boolean;
-  ideaId:string;
+export interface Voted {
+  id: string;
+  userId: string;
+  isUpVote: boolean;
+  ideaId: string;
+}
+
+export interface BuyIdeaData {
+  id: string;
+  name: string;
+  price: number;
+  isPaid: boolean;
+  imageUrl: string;
 }

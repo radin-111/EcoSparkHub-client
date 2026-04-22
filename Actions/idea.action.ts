@@ -85,3 +85,14 @@ export const updateIdea = async (id: string, payload: FormData) => {
     throw err;
   }
 };
+
+
+
+export const initiatePayment = async (id: string) => {
+  try {
+    const res = await httpClient.post(`/idea/initiate-payment/${id}`);
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};

@@ -6,7 +6,8 @@ import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import { SessionResponse } from "@/types&enums&interfaces/auth.types";
 import { CommentData } from "@/types&enums&interfaces/comment.interface";
 import { IdeaData, Voted } from "@/types&enums&interfaces/idea.interface";
-import { HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 export default async function SingleIdeaPage({
   params,
@@ -33,16 +34,22 @@ export default async function SingleIdeaPage({
     queryKey: ["comments", id],
     queryFn: async () => await httpClient.get<IdeaData>(`/comment/${id}`),
   });
-  const idea = queryClient.getQueryData(["idea", id]) as ApiResponse<IdeaData>;
+  const idea = queryClient.getQueryData(["idea", id]) as ApiResponse<any>;
   const comments = queryClient.getQueryData(["comments", id]) as ApiResponse<
     CommentData[]
   >;
+if(idea.data.redirect){
+  return redirect(`/buy/${id}`);
+}
+
+
+
   const voted = queryClient.getQueryData(["isVoted", id]) as ApiResponse<Voted> || null;
   const isVoted = voted?.data || false;
   return (
     <div className="max-w-8/12 mx-auto">
       <IdeaDetails
-        idea={idea.data}
+        idea={idea.data as IdeaData}
         sessionUserId={session?.data?.user?.id || null}
         isVoted={isVoted.id ? true : false}
         isUpvoted={voted?.data?.isUpVote || false}

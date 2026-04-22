@@ -26,6 +26,7 @@ let route: routes = userRoutes;
 const session = (await getSession()) as ApiResponse<SessionResponse>;
 
 if (session?.success && session.data?.user?.role === UserRoles.ADMIN) {
+  
   route = adminRoutes;
 }
 export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

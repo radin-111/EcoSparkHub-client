@@ -25,6 +25,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
+  if (reqPath.startsWith("/buy") && !isAuthenticated) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
   if (
     (reqPath.startsWith("/admin") || reqPath.startsWith("/dashboard")) &&
     !isAuthenticated
@@ -45,6 +49,7 @@ export const config = {
     "/login",
     "/dashboard",
     "/admin",
+    "/buy/:path*",
     "/admin/:path*",
     "/dashboard/:path*",
   ],
