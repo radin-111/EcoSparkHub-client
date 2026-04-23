@@ -3,18 +3,22 @@ import Pagination from "@/components/shared/pagination";
 import { httpClient } from "@/lib/axios/httpClient";
 import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import { Payment } from "@/types&enums&interfaces/payment.interface";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 export const dynamic = "force-dynamic";
-export default async function MyTransactionsPage() {
+export default async function AllTransactionsPage() {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ["my-transactions"],
-    queryFn: () => httpClient.get<Payment[]>("/payment/my-transactions"),
+    queryKey: ["transactions"],
+    queryFn: () => httpClient.get("/payment/all-transactions"),
   });
   const transactions = queryClient.getQueryData([
-    "my-transactions",
+    "transactions",
   ]) as ApiResponse<Payment[]>;
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <TransactionsTable data={transactions?.data || []} />
