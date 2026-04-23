@@ -21,7 +21,7 @@ export default async function AllTransactionsPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TransactionsTable data={transactions?.data || []} />
+      <TransactionsTable data={transactions?.data} />
       <Pagination totalPages={Number(transactions?.meta?.totalPages) || 0} />
     </HydrationBoundary>
   );

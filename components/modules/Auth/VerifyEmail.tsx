@@ -128,12 +128,7 @@ export default function VerifyEmail() {
 
           <p className="text-sm text-muted-foreground text-center mt-4">
             Didn’t receive the code?{" "}
-            <button
-              type="button"
-              className="text-primary underline underline-offset-4"
-            >
-              Resend
-            </button>
+           
           </p>
         </CardContent>
       </Card>
