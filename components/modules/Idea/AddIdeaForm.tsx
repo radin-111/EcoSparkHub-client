@@ -45,7 +45,7 @@ export default function AddIdeaForm({
       description: "",
       image: null as File | null,
       isPaid: false,
-      price: "",
+      price: "0",
       status: "DRAFT",
       categoryId: "",
     },
