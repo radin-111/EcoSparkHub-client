@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import LogoImage from "@/assets/svg/logo";
 import Session from "@/components/modules/Auth/Session";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 type NavigationItem = {
   title: string;
@@ -56,6 +57,7 @@ const Navbar = ({ navigationData }: { navigationData: NavigationItem }) => {
         </div>
 
         <div className="flex items-center gap-6">
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger className="md:hidden" asChild>
               <Button variant="outline" size="icon">

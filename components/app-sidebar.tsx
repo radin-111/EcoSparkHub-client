@@ -20,6 +20,7 @@ import { ApiResponse } from "@/types&enums&interfaces/api.types";
 import { SessionResponse } from "@/types&enums&interfaces/auth.types";
 import Logout from "./modules/Auth/Logout";
 import Avatar from "./modules/Auth/Avatar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 
 
@@ -35,10 +36,13 @@ export async function AppSidebar({
   }
   return (
     <Sidebar {...props}>
-      <SidebarHeader className="flex items-left">
+      <SidebarHeader className="flex items-center justify-between">
         <div className="ml-4 mb-0 mt-2">
           <Avatar imageUrl={session?.data?.user?.image as string} />
           <h1 className="text-lg font-bold">{session?.data?.user?.name}</h1>
+        </div>
+        <div className="mr-4 mt-2">
+          <ThemeToggle />
         </div>
       </SidebarHeader>
 

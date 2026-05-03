@@ -4,6 +4,7 @@ import "./globals.css";
 import QueryProviders from "@/providers/QueryProviders";
 import LenisProvider from "@/components/providers/LenisProvider";
 import PageTransitionProvider from "@/components/providers/PageTransitionProvider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "sonner";
 
 const geistSans = Geist({
@@ -27,16 +28,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <LenisProvider>
-          <PageTransitionProvider>
-            <QueryProviders>{children}</QueryProviders>
-            <Toaster/>
-          </PageTransitionProvider>
-        </LenisProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LenisProvider>
+            <PageTransitionProvider>
+              <QueryProviders>{children}</QueryProviders>
+              <Toaster/>
+            </PageTransitionProvider>
+          </LenisProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
