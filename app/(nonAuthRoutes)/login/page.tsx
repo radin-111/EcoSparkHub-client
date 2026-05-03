@@ -45,9 +45,9 @@ export default function LoginPage() {
                 <Logo />
               </motion.div>
               <div className="">
-                <span className="text-3xl font-black tracking-tighter bg-gradient-to-r from-slate-900 via-emerald-700 to-slate-900 bg-clip-text text-transparent leading-none">
+                <span className="text-3xl font-black tracking-tighter bg-gradient-to-r from-slate-900 dark:from-slate-100 via-emerald-700 dark:via-emerald-600 to-slate-900 dark:to-slate-100 bg-clip-text text-transparent leading-none">
                   EcoSpark
-                  <span className="text-emerald-600 font-medium">Hub</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-medium">Hub</span>
                 </span>
               </div>
             </div>
@@ -91,7 +91,7 @@ export default function LoginPage() {
               </motion.div>
 
               {/* Form Card */}
-              <div className="relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8">
+              <div className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-white/20 dark:border-gray-700/20 rounded-3xl shadow-2xl p-8">
                 {/* Welcome Text */}
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -99,10 +99,10 @@ export default function LoginPage() {
                   transition={{ duration: 0.6, delay: 0.3 }}
                   className="text-center mb-8"
                 >
-                  <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-emerald-600 bg-clip-text text-transparent mb-2">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 dark:from-gray-100 to-emerald-600 dark:to-emerald-400 bg-clip-text text-transparent mb-2">
                     Welcome Back
                   </h2>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
                     Sign in to continue your eco-journey
                   </p>
                 </motion.div>
@@ -128,7 +128,7 @@ export default function LoginPage() {
             className="h-full w-full object-cover"
           />
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/40 via-transparent to-blue-900/40" />
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/60 dark:from-emerald-900/80 via-transparent to-blue-900/60 dark:to-blue-900/80" />
           {/* Text Overlay */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -139,7 +139,7 @@ export default function LoginPage() {
             <h3 className="text-4xl font-bold mb-4">
               Grow Your Ideas,
               <br />
-              <span className="text-emerald-300">Nurture the Planet</span>
+              <span className="text-emerald-300">Nurture Planet</span>
             </h3>
             <p className="text-lg text-white/90 max-w-md">
               Join thousands of eco-innovators sharing sustainable ideas and making a real difference.

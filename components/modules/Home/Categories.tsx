@@ -25,13 +25,13 @@ export function Categories() {
   }, []);
 
   return (
-    <ScrollAnimation animation="fadeInUp" className="relative py-24 overflow-hidden bg-white">
+    <ScrollAnimation animation="fadeInUp" className="relative py-24 overflow-hidden bg-white dark:bg-gray-900">
       {/* Animated Central Professional Gradient Glow */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" as const }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-emerald-50/50 rounded-full blur-[120px] pointer-events-none" 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-emerald-50/30 dark:bg-emerald-900/20 rounded-full blur-[120px] pointer-events-none" 
       />
 
       <div ref={sectionRef} className="container relative z-10 mx-auto px-6">
@@ -43,13 +43,13 @@ export function Categories() {
         >
           <motion.h2 
             variants={fadeInUpVariant}
-            className="text-4xl md:text-5xl font-bold tracking-tighter text-slate-900 mb-4"
+            className="text-4xl md:text-5xl font-bold tracking-tighter text-slate-900 dark:text-slate-100 mb-4"
           >
             Browse by Topic
           </motion.h2>
           <motion.p 
             variants={fadeInUpVariant}
-            className="text-slate-500 max-w-md mx-auto text-lg leading-relaxed"
+            className="text-slate-500 dark:text-slate-400 max-w-md mx-auto text-lg leading-relaxed"
           >
             Select a specialized category to explore community-driven innovations.
           </motion.p>
@@ -72,14 +72,14 @@ export function Categories() {
               }}
               whileTap={{ scale: 0.98 }}
             >
-              <Card className="group relative h-40 overflow-hidden border-slate-200/60 bg-white/50 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_20px_50px_rgba(16,_185,_129,_0.15)] hover:border-emerald-200 cursor-pointer rounded-[2rem]">
+              <Card className="group relative h-40 overflow-hidden border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_20px_50px_rgba(16,_185,_129,_0.15)] dark:hover:shadow-[0_20px_50px_rgba(16,_185,_129,_0.3)] hover:border-emerald-200 dark:hover:border-emerald-700 cursor-pointer rounded-[2rem]">
                 <CardContent className="h-full p-8 flex flex-col justify-end">
                   {/* Animated Background Ghost Number */}
                   <motion.span 
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.1 + 0.3, duration: 0.5 }}
-                    className="absolute top-4 right-6 text-8xl font-black text-slate-50 group-hover:text-emerald-50/50 transition-colors duration-500 pointer-events-none select-none"
+                    className="absolute top-4 right-6 text-8xl font-black text-slate-50 dark:text-slate-900/30 group-hover:text-emerald-50/50 dark:group-hover:text-emerald-900/30 transition-colors duration-500 pointer-events-none select-none"
                   >
                     {i + 1 < 10 ? `0${i + 1}` : i + 1}
                   </motion.span>
@@ -103,7 +103,7 @@ export function Categories() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 + 0.5, duration: 0.5 }}
-                      className="text-2xl font-bold text-slate-800 group-hover:text-emerald-900 transition-colors duration-300"
+                      className="text-2xl font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-900 dark:group-hover:text-emerald-400 transition-colors duration-300"
                     >
                       {category.name}
                     </motion.h3>

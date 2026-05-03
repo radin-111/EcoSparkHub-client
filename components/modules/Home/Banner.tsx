@@ -22,7 +22,7 @@ export default function Banner() {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" as const }}
-      className="w-full overflow-hidden rounded-2xl shadow-2xl"
+      className="w-full overflow-hidden rounded-2xl shadow-2xl dark:shadow-black/20 border border-border/20"
     >
       <motion.div
         whileHover={{ scale: 1.02 }}
@@ -35,7 +35,7 @@ export default function Banner() {
           className="w-full h-auto object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 dark:from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
       </motion.div>
     </motion.div>
   );

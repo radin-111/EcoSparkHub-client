@@ -46,7 +46,7 @@ export function FeaturedIdeas() {
   ];
 
   return (
-    <ScrollAnimation animation="fadeInUp" className="py-24 bg-gradient-to-b from-green-50 via-green-100 to-white">
+    <ScrollAnimation animation="fadeInUp" className="py-24 bg-gradient-to-b from-green-50 via-green-100 to-white dark:from-gray-900 dark:via-gray-800 dark:to-background">
       <motion.div
         initial="hidden"
         animate="visible"
@@ -55,7 +55,7 @@ export function FeaturedIdeas() {
       >
         <motion.h2 
           variants={fadeInUpVariant}
-          className="text-4xl md:text-5xl font-extrabold text-center bg-gradient-to-r from-green-800 to-emerald-600 bg-clip-text text-transparent mb-16"
+          className="text-4xl md:text-5xl font-extrabold text-center bg-gradient-to-r from-green-800 dark:from-green-600 to-emerald-600 dark:to-emerald-400 bg-clip-text text-transparent mb-16"
         >
           Recent Ideas
         </motion.h2>
@@ -72,7 +72,7 @@ export function FeaturedIdeas() {
               }}
               whileTap={{ scale: 0.98 }}
             >
-              <Card className="group relative h-full rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 bg-white/80 backdrop-blur-md border border-green-100 overflow-hidden">
+              <Card className="group relative h-full rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-green-100 dark:border-green-900/30 overflow-hidden">
                 {/* Gradient Accent Line */}
                 <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${idea.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                 
@@ -86,7 +86,7 @@ export function FeaturedIdeas() {
                     stiffness: 200,
                     delay: index * 0.1 + 0.2
                   }}
-                  className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-br from-white to-gray-100 shadow-lg flex items-center justify-center text-2xl"
+                  className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-br from-white dark:from-gray-800 to-gray-100 dark:to-gray-700 shadow-lg flex items-center justify-center text-2xl"
                 >
                   {idea.icon}
                 </motion.div>
@@ -96,7 +96,7 @@ export function FeaturedIdeas() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 + 0.3 }}
-                    className="font-bold text-xl text-gray-800 mb-3 group-hover:text-green-700 transition-colors duration-300"
+                    className="font-bold text-xl text-gray-800 dark:text-gray-100 mb-3 group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors duration-300"
                   >
                     {idea.title}
                   </motion.h3>
@@ -105,7 +105,7 @@ export function FeaturedIdeas() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: index * 0.1 + 0.4 }}
-                    className="text-gray-600 leading-relaxed mb-6"
+                    className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
                   >
                     {idea.description}
                   </motion.p>
@@ -125,7 +125,7 @@ export function FeaturedIdeas() {
                     
                     <motion.div 
                       whileHover={{ scale: 1.1 }}
-                      className="flex items-center gap-1 text-gray-500 group-hover:text-green-600 transition-colors duration-300"
+                      className="flex items-center gap-1 text-gray-500 dark:text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300"
                     >
                       <span className="text-sm">{idea.votes} votes</span>
                     </motion.div>

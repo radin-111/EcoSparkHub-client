@@ -18,92 +18,33 @@ export function SubmitCTA() {
   }, []);
 
   return (
-    <ScrollAnimation animation="fadeInUp" className="px-6 py-20 md:px-16">
-      <motion.div
-        ref={sectionRef}
-        initial={{ opacity: 0, scale: 0.95 }}
+    <ScrollAnimation animation="fadeInUp" className="relative py-24 overflow-hidden bg-gradient-to-br from-emerald-50 via-green-100 to-white dark:from-gray-900 dark:via-emerald-900 dark:to-background">
+      {/* Animated Central Gradient Core */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" as const }}
-        className="relative max-w-6xl mx-auto overflow-hidden rounded-[3rem] border border-emerald-100 bg-white p-8 md:p-20 shadow-2xl shadow-emerald-100/50"
-      >
-        {/* Animated "Center Glow" Design */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" as const }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-50 via-white to-white pointer-events-none"
-        />
+        transition={{ duration: 1, ease: "easeOut" as const }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-emerald-100/40 dark:bg-emerald-900/20 rounded-full blur-[120px] pointer-events-none" 
+      />
 
-        {/* Animated Blurry accent Orbs */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2, ease: "easeOut" as const }}
-          whileHover={{ scale: 1.2 }}
-          className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-200/30 rounded-full blur-[100px]"
-        />
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.4, ease: "easeOut" as const }}
-          whileHover={{ scale: 1.2 }}
-          className="absolute -bottom-24 -left-24 w-96 h-96 bg-teal-100/40 rounded-full blur-[100px]"
-        />
-
+      <div ref={sectionRef} className="container relative z-10 mx-auto px-6">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={staggerContainerVariant}
-          className="relative z-10 flex flex-col items-center text-center"
+          className="text-center"
         >
-          {/* Animated Subtle Badge */}
-          <motion.div
+          <motion.h2 
             variants={fadeInUpVariant}
-            whileHover={{
-              scale: 1.05,
-              transition: { duration: 0.3, ease: "easeOut" as const },
-            }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 mb-8"
+            className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-emerald-800 dark:from-emerald-600 to-green-600 dark:to-emerald-400 bg-clip-text text-transparent mb-6"
           >
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut" as const,
-              }}
-            >
-              <Sparkles className="w-4 h-4 text-emerald-600" />
-            </motion.div>
-            <span className="text-xs font-bold uppercase tracking-widest text-emerald-700">
-              Community Driven
-            </span>
-          </motion.div>
-
-          <motion.h2
-            variants={fadeInUpVariant}
-            className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6"
-          >
-            Ready to share your{" "}
-            <motion.span
-              whileHover={{
-                scale: 1.1,
-                color: "#10b981",
-              }}
-              transition={{ duration: 0.3 }}
-              className="text-emerald-600"
-            >
-              vision?
-            </motion.span>
+            Submit Your Eco-Idea
           </motion.h2>
-
-          <motion.p
+          <motion.p 
             variants={fadeInUpVariant}
-            className="max-w-xl mx-auto text-lg text-slate-500 leading-relaxed mb-10"
+            className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-lg leading-relaxed mb-12"
           >
-            Join 800+ members in building sustainable solutions. Share your idea
-            today and get validation you need to move forward.
+            Have an innovative eco-friendly concept? Share it with our community and make a real impact on the environment.
           </motion.p>
 
           <motion.div
@@ -118,7 +59,7 @@ export function SubmitCTA() {
             >
               <Button
                 size="lg"
-                className="group relative h-14 px-10 rounded-full bg-slate-900 text-white hover:bg-slate-800 transition-all duration-300 overflow-hidden shadow-xl"
+                className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-emerald-200 dark:border-emerald-700 rounded-3xl shadow-2xl hover:shadow-[0_25px_50px_rgba(16,_185,_129,_0.25)] dark:hover:shadow-[0_25px_50px_rgba(16,_185,_129,_0.4)] transition-all duration-500 overflow-hidden"
               >
                 {/* Enhanced Shimmer Effect */}
                 <motion.div
@@ -180,21 +121,20 @@ export function SubmitCTA() {
                 scale: 1.05,
               }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 text-slate-500 font-medium transition-colors"
+              className="text-slate-500 dark:text-slate-400 text-sm mb-6"
             >
               View Guidelines
             </motion.button>
           </motion.div>
         </motion.div>
-
-        {/* Animated Subtle Noise Texture Overlay */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.03, 0] }}
-          transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"
-        />
-      </motion.div>
+      </div>
+      {/* Animated Subtle Noise Texture Overlay */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0.03, 0] }}
+        transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+        className="absolute inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"
+      />
     </ScrollAnimation>
   );
 }

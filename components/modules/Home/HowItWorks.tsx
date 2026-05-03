@@ -46,34 +46,33 @@ export function HowItWorks() {
   }, []);
 
   return (
-    <ScrollAnimation animation="fadeInUp" className="relative py-24 overflow-hidden">
-      {/* Animated Central Blurry Gradient Core */}
+    <ScrollAnimation animation="fadeInUp" className="relative py-24 overflow-hidden bg-gradient-to-br from-slate-50 via-emerald-50 to-white dark:from-gray-900 dark:via-emerald-900 dark:to-background">
+      {/* Animated Central Gradient Core */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" as const }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-emerald-200/40 rounded-full blur-[120px] pointer-events-none" 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-emerald-100/40 dark:bg-emerald-900/20 rounded-full blur-[120px] pointer-events-none" 
       />
 
-      <div ref={sectionRef} className="container relative z-10 mx-auto px-4">
-        <motion.div
+      <div ref={sectionRef} className="container relative z-10 mx-auto px-6">
+        <motion.div 
           initial="hidden"
           animate="visible"
           variants={staggerContainerVariant}
-          className="text-center max-w-2xl mx-auto mb-20"
+          className="text-center mb-20"
         >
           <motion.h2 
             variants={fadeInUpVariant}
-            className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-4"
+            className="text-4xl md:text-5xl font-bold tracking-tighter text-slate-900 dark:text-slate-100 mb-6"
           >
-            Simple Process, Real Impact
+            How It Works
           </motion.h2>
           <motion.p 
             variants={fadeInUpVariant}
-            className="text-slate-600 text-lg"
+            className="text-slate-600 dark:text-slate-400 max-w-3xl mx-auto text-lg leading-relaxed"
           >
-            Follow our streamlined workflow to take your idea from concept to
-            community-validated reality.
+            From innovative ideas to real-world impact, our platform connects eco-conscious minds to drive sustainable change.
           </motion.p>
         </motion.div>
 
@@ -104,7 +103,7 @@ export function HowItWorks() {
               }}
               whileTap={{ scale: 0.98 }}
             >
-              <Card className={`relative group bg-white/70 backdrop-blur-md border-slate-200/60 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden ${
+              <Card className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-slate-200/60 dark:border-slate-700/60 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden ${
                 activeStep === i ? 'ring-2 ring-emerald-400 border-emerald-300' : ''
               }`}>
                 <CardContent className="p-8">
@@ -147,7 +146,7 @@ export function HowItWorks() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 + 0.4, duration: 0.5 }}
-                    className="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-700 transition-colors duration-300"
+                    className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors duration-300"
                   >
                     {step.label}
                   </motion.h3>
@@ -156,7 +155,7 @@ export function HowItWorks() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.1 + 0.5, duration: 0.5 }}
-                    className="text-slate-500 text-sm leading-relaxed"
+                    className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6"
                   >
                     {step.description}
                   </motion.p>

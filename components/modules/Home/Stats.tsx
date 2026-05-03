@@ -61,13 +61,13 @@ export function Stats() {
   }, []);
 
   return (
-    <ScrollAnimation animation="fadeInUp" className="relative py-24 overflow-hidden bg-white">
+    <ScrollAnimation animation="fadeInUp" className="relative py-24 overflow-hidden bg-white dark:bg-gray-900">
       {/* Animated Refined Central Gradient Core */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" as const }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-emerald-100/40 rounded-[100%] blur-[120px] pointer-events-none" 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-emerald-100/40 dark:bg-emerald-900/20 rounded-[100%] blur-[120px] pointer-events-none" 
       />
 
       <div ref={sectionRef} className="container relative z-10 mx-auto px-6">
@@ -75,7 +75,7 @@ export function Stats() {
           initial="hidden"
           animate="visible"
           variants={staggerContainerVariant}
-          className="grid grid-cols-1 md:grid-cols-3 gap-px bg-slate-200/50 rounded-3xl overflow-hidden border border-slate-200/60 shadow-xl shadow-slate-200/20"
+          className="grid grid-cols-1 md:grid-cols-3 gap-px bg-slate-200/50 dark:bg-slate-700/50 rounded-3xl overflow-hidden border border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-200/20 dark:shadow-slate-800/20"
         >
           {stats.map((stat, i) => (
             <motion.div
@@ -85,7 +85,7 @@ export function Stats() {
                 scale: 1.02,
                 transition: { duration: 0.3, ease: "easeOut" as const }
               }}
-              className="group relative bg-white/70 backdrop-blur-md p-10 lg:p-14 transition-all duration-500 hover:bg-emerald-50/40"
+              className="group relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-10 lg:p-14 transition-all duration-500 hover:bg-emerald-50/40 dark:hover:bg-emerald-900/30"
             >
               <div className="flex flex-col items-center text-center">
                 {/* Animated Icon Circle */}
@@ -112,7 +112,7 @@ export function Stats() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 + 0.4, duration: 0.6 }}
-                  className="text-4xl lg:text-5xl font-bold tracking-tighter text-slate-900 mb-2"
+                  className="text-4xl lg:text-5xl font-bold tracking-tighter text-slate-900 dark:text-slate-100 mb-2"
                 >
                   {isVisible && (
                     <>
@@ -138,7 +138,7 @@ export function Stats() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: i * 0.1 + 0.6, duration: 0.5 }}
-                  className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 mb-4"
+                  className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-400 mb-4"
                 >
                   {stat.label}
                 </motion.span>
@@ -148,7 +148,7 @@ export function Stats() {
                   animate={{ opacity: 0.8 }}
                   whileHover={{ opacity: 1 }}
                   transition={{ delay: i * 0.1 + 0.8, duration: 0.5 }}
-                  className="text-slate-500 text-sm max-w-[180px] leading-relaxed transition-opacity"
+                  className="text-slate-500 dark:text-slate-400 text-sm max-w-[180px] leading-relaxed transition-opacity"
                 >
                   {stat.description}
                 </motion.p>
