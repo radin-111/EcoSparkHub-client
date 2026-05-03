@@ -1,36 +1,144 @@
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import ScrollAnimation from "@/components/ui/scroll-animation";
+import { fadeInUpVariant, staggerContainerVariant } from "@/lib/animations";
+import { useEffect, useRef } from "react";
+import { scaleIn } from "@/lib/animations";
 
 export function FeaturedIdeas() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      const cards = sectionRef.current.querySelectorAll('[data-idea-card]');
+      cards.forEach((card, index) => {
+        scaleIn(card as HTMLElement, 0.6, index * 0.1);
+      });
+    }
+  }, []);
+
+  const ideas = [
+    {
+      title: "Solar Community Project",
+      description: "Implement solar panels in rural communities to reduce electricity costs and carbon footprint while promoting clean energy.",
+      category: "🌞 Solar",
+      votes: 120,
+      icon: "☀️",
+      gradient: "from-yellow-400 to-orange-500"
+    },
+    {
+      title: "Ocean Cleanup Initiative",
+      description: "Deploy autonomous drones to collect plastic waste from ocean surfaces and prevent marine pollution.",
+      category: "🌊 Ocean",
+      votes: 98,
+      icon: "🌊",
+      gradient: "from-blue-400 to-cyan-500"
+    },
+    {
+      title: "Urban Forest Project",
+      description: "Transform vacant city lots into mini-forests to improve air quality and community spaces.",
+      category: "🌳 Forest",
+      votes: 156,
+      icon: "🌲",
+      gradient: "from-green-400 to-emerald-500"
+    }
+  ];
+
   return (
-    <section className="py-24 bg-gradient-to-b from-green-50 via-green-100 to-white">
-      <h2 className="text-4xl font-extrabold text-center text-green-800 mb-16">
-        Recent Ideas
-      </h2>
-      <div className="grid md:grid-cols-3 gap-10 px-6 md:px-20">
-        {[1, 2, 3].map((i) => (
-          <Card
-            key={i}
-            className="rounded-3xl shadow-2xl hover:shadow-3xl transition-transform transform hover:-translate-y-3 bg-white/80 backdrop-blur-md border border-green-100"
-          >
-            <CardContent className="p-6">
-              <h3 className="font-bold text-xl text-green-700">
-                Solar Community Project
-              </h3>
-              <p className="text-gray-700 mt-3">
-                Implement solar panels in rural communities to reduce
-                electricity costs and carbon footprint while promoting clean
-                energy.
-              </p>
-              <div className="mt-6 flex justify-between items-center">
-                <span className="text-green-600 font-semibold bg-green-100/50 px-3 py-1 rounded-full">
-                  🌞 Solar
-                </span>
-                <span className="text-gray-500 text-sm">120 votes</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </section>
+    <ScrollAnimation animation="fadeInUp" className="py-24 bg-gradient-to-b from-green-50 via-green-100 to-white">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={staggerContainerVariant}
+        className="container mx-auto px-6 md:px-20"
+      >
+        <motion.h2 
+          variants={fadeInUpVariant}
+          className="text-4xl md:text-5xl font-extrabold text-center bg-gradient-to-r from-green-800 to-emerald-600 bg-clip-text text-transparent mb-16"
+        >
+          Recent Ideas
+        </motion.h2>
+        
+        <div ref={sectionRef} className="grid md:grid-cols-3 gap-10">
+          {ideas.map((idea, index) => (
+            <motion.div
+              key={index}
+              data-idea-card
+              variants={fadeInUpVariant}
+              whileHover={{ 
+                y: -12,
+                transition: { duration: 0.3, ease: "easeOut" as const }
+              }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Card className="group relative h-full rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 bg-white/80 backdrop-blur-md border border-green-100 overflow-hidden">
+                {/* Gradient Accent Line */}
+                <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${idea.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                
+                {/* Floating Icon */}
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ 
+                    duration: 0.5, 
+                    type: "spring" as const, 
+                    stiffness: 200,
+                    delay: index * 0.1 + 0.2
+                  }}
+                  className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-gradient-to-br from-white to-gray-100 shadow-lg flex items-center justify-center text-2xl"
+                >
+                  {idea.icon}
+                </motion.div>
+
+                <CardContent className="p-6 pt-8">
+                  <motion.h3 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 + 0.3 }}
+                    className="font-bold text-xl text-gray-800 mb-3 group-hover:text-green-700 transition-colors duration-300"
+                  >
+                    {idea.title}
+                  </motion.h3>
+                  
+                  <motion.p 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: index * 0.1 + 0.4 }}
+                    className="text-gray-600 leading-relaxed mb-6"
+                  >
+                    {idea.description}
+                  </motion.p>
+                  
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 + 0.5 }}
+                    className="flex justify-between items-center"
+                  >
+                    <motion.span 
+                      whileHover={{ scale: 1.05 }}
+                      className={`text-sm font-semibold px-3 py-1 rounded-full bg-gradient-to-r ${idea.gradient} text-white shadow-md`}
+                    >
+                      {idea.category}
+                    </motion.span>
+                    
+                    <motion.div 
+                      whileHover={{ scale: 1.1 }}
+                      className="flex items-center gap-1 text-gray-500 group-hover:text-green-600 transition-colors duration-300"
+                    >
+                      <span className="text-sm">{idea.votes} votes</span>
+                    </motion.div>
+                  </motion.div>
+                </CardContent>
+
+                {/* Hover Gradient Overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${idea.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`} />
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </ScrollAnimation>
   );
 }
